@@ -78,6 +78,13 @@ def main() -> None:
                          pd.read_csv(RESULTS / "solubility_shap_top20.csv", index_col=0).iloc[:10, 0].items()}
     d["sol_meta"] = json.loads((RESULTS / "solubility_meta.json").read_text())
 
+    sc = pd.read_csv(RESULTS / "enose_series_curve.csv")
+    sc = sc[~sc.design.eq("rows from 4 series")].groupby(["design", "n_series"]).macro_f1.mean().reset_index()
+    order = [("more series", k) for k in [1, 2, 3, 4]] + [(f"{n} rows from 4 series", 4) for n in [640, 160, 40]]
+    label = lambda dsg, k: f"{k} seri" if dsg == "more series" else f"4 seri · {dsg.split()[0]} baris"  # noqa: E731
+    d["series_curve"] = [{"label": label(dsg, k), "f1": R(sc.query("design == @dsg and n_series == @k").macro_f1.iloc[0])}
+                         for dsg, k in order]
+
     d["al_solubility"] = al_summary(RESULTS / "al_solubility.csv", metric_higher_better=False)
     d["al_enose"] = al_summary(RESULTS / "al_enose.csv", metric_higher_better=True)
 

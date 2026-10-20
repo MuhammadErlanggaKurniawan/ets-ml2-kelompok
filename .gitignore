@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.DS_Store
+data/raw/*
+!data/raw/checksums_sha256.json
+data/processed/
+data/egg/
+deck/node_modules/
+deck/render/
+results/egg_smoke_*
+*.log

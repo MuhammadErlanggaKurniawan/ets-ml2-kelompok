@@ -1,0 +1,20 @@
+[project]
+name = "ets-ml2-kelompok"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "certifi>=2026.10.19",
+    "imbalanced-learn>=0.14.2",
+    "lightgbm>=4.7.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "optuna>=5.0.0",
+    "pandas>=3.0.6",
+    "pyarrow>=26.0.0",
+    "rdkit>=2026.9.1",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "seaborn>=0.13.2",
+    "shap>=0.54.1",
+    "xgboost>=3.4.1",
+]

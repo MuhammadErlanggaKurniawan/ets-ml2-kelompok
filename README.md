@@ -16,16 +16,28 @@ Proyek ini membangun satu pipeline (akuisisi → wrangling → augmentasi/imbala
 *active learning* berbasis *multi-armed bandit* → interpretasi). Pipeline itu diuji pada dua dataset publik,
 dan slot untuk data citra telur sudah disiapkan.
 
-## Notebook (jalankan di Colab)
+## Notebook (satu notebook, jalankan di Colab)
 
-| Notebook | Isi | Colab |
-|---|---|---|
-| `01_track_A_enose_kesegaran` | E-nose daging sapi: leakage, ensemble, imbalance, augmentasi, SHAP, kurva batch | [buka](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/01_track_A_enose_kesegaran.ipynb) |
-| `02_track_B_kelarutan_aqsoldb` | AqSolDB: scaffold split, ensemble, Optuna, imbalanced regression, SHAP | [buka](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/02_track_B_kelarutan_aqsoldb.ipynb) |
-| `03_reinforcement_active_learning` | Agen bandit (ε-greedy, UCB1) yang memilih strategi kueri, untuk kedua track | [buka](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/03_reinforcement_active_learning.ipynb) |
-| `04_track_C_telur_puyuh_slot` | EfficientNet-B0 + XGBoost untuk Yolk Index, **menunggu data** | [buka](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/04_track_C_telur_puyuh_slot.ipynb) |
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/ETS_ML2_Pipeline_Lengkap.ipynb)
 
-Notebook dibangun dari `scripts/build_notebooks.py`. Ubah kodenya di sana, lalu jalankan `python3 scripts/build_notebooks.py`.
+`notebooks/ETS_ML2_Pipeline_Lengkap.ipynb` berisi 13 bagian berurutan:
+1. Persiapan
+2. Akuisisi data
+3. EDA
+4. Wrangling
+5. Validasi jujur
+6. Ensemble + Optuna
+7. Imbalance
+8. Augmentasi
+9. Bandit active learning
+10. Tambah batch vs baris
+11. SHAP
+12. Slot citra telur (opsional)
+13. Ringkasan
+
+Pilih **Runtime → Run all**. Mode `"lengkap"` (sama dengan slide) butuh waktu ±60–90 menit di CPU Colab. Mode `"cepat"` untuk demo.
+
+Notebook dibangun dari `scripts/build_notebook.py`. Ubah kodenya di sana, lalu jalankan `python3 scripts/build_notebook.py`.
 
 ## Versi skrip (lokal)
 

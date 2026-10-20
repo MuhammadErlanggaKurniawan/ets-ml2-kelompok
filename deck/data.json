@@ -1,0 +1,816 @@
+{
+  "enose_split": [
+    {
+      "label": "random/raw",
+      "model": "LightGBM",
+      "f1": 0.992,
+      "sd": 0.002
+    },
+    {
+      "label": "random/raw",
+      "model": "RandomForest",
+      "f1": 0.993,
+      "sd": 0.001
+    },
+    {
+      "label": "random/engineered",
+      "model": "LightGBM",
+      "f1": 0.998,
+      "sd": 0.001
+    },
+    {
+      "label": "random/engineered",
+      "model": "RandomForest",
+      "f1": 0.998,
+      "sd": 0.001
+    },
+    {
+      "label": "loso/raw",
+      "model": "LightGBM",
+      "f1": 0.508,
+      "sd": 0.109
+    },
+    {
+      "label": "loso/raw",
+      "model": "RandomForest",
+      "f1": 0.469,
+      "sd": 0.161
+    },
+    {
+      "label": "loso/engineered",
+      "model": "LightGBM",
+      "f1": 0.572,
+      "sd": 0.075
+    },
+    {
+      "label": "loso/engineered",
+      "model": "RandomForest",
+      "f1": 0.503,
+      "sd": 0.121
+    }
+  ],
+  "enose_temp": {
+    "without": 0.572,
+    "with": 0.63
+  },
+  "enose_models_4-class": [
+    {
+      "model": "LogReg",
+      "f1": 0.505,
+      "sd": 0.196
+    },
+    {
+      "model": "SVM-RBF",
+      "f1": 0.435,
+      "sd": 0.246
+    },
+    {
+      "model": "KNN",
+      "f1": 0.42,
+      "sd": 0.232
+    },
+    {
+      "model": "DecisionTree",
+      "f1": 0.567,
+      "sd": 0.122
+    },
+    {
+      "model": "RandomForest",
+      "f1": 0.503,
+      "sd": 0.121
+    },
+    {
+      "model": "XGBoost",
+      "f1": 0.556,
+      "sd": 0.072
+    },
+    {
+      "model": "LightGBM",
+      "f1": 0.572,
+      "sd": 0.075
+    },
+    {
+      "model": "Stacking",
+      "f1": 0.514,
+      "sd": 0.184
+    }
+  ],
+  "enose_models_binary": [
+    {
+      "model": "LogReg",
+      "f1": 0.728,
+      "sd": 0.263
+    },
+    {
+      "model": "SVM-RBF",
+      "f1": 0.688,
+      "sd": 0.276
+    },
+    {
+      "model": "KNN",
+      "f1": 0.74,
+      "sd": 0.275
+    },
+    {
+      "model": "DecisionTree",
+      "f1": 0.774,
+      "sd": 0.247
+    },
+    {
+      "model": "RandomForest",
+      "f1": 0.776,
+      "sd": 0.182
+    },
+    {
+      "model": "XGBoost",
+      "f1": 0.911,
+      "sd": 0.058
+    },
+    {
+      "model": "LightGBM",
+      "f1": 0.849,
+      "sd": 0.117
+    },
+    {
+      "model": "Stacking",
+      "f1": 0.79,
+      "sd": 0.187
+    }
+  ],
+  "enose_imbalance": [
+    {
+      "model": "LogReg",
+      "variant": "class_weight=None",
+      "f1": 0.505,
+      "sd": 0.196,
+      "recall_excellent": 0.868
+    },
+    {
+      "model": "LogReg",
+      "variant": "class_weight=balanced",
+      "f1": 0.499,
+      "sd": 0.196,
+      "recall_excellent": 0.887
+    },
+    {
+      "model": "LogReg",
+      "variant": "SMOTE",
+      "f1": 0.49,
+      "sd": 0.214,
+      "recall_excellent": 0.878
+    },
+    {
+      "model": "LogReg",
+      "variant": "RandomUnder",
+      "f1": 0.476,
+      "sd": 0.215,
+      "recall_excellent": 0.883
+    },
+    {
+      "model": "LightGBM",
+      "variant": "class_weight=None",
+      "f1": 0.572,
+      "sd": 0.075,
+      "recall_excellent": 0.907
+    },
+    {
+      "model": "LightGBM",
+      "variant": "class_weight=balanced",
+      "f1": 0.591,
+      "sd": 0.134,
+      "recall_excellent": 0.894
+    },
+    {
+      "model": "LightGBM",
+      "variant": "SMOTE",
+      "f1": 0.571,
+      "sd": 0.129,
+      "recall_excellent": 0.921
+    },
+    {
+      "model": "LightGBM",
+      "variant": "RandomUnder",
+      "f1": 0.584,
+      "sd": 0.063,
+      "recall_excellent": 0.965
+    }
+  ],
+  "enose_augment": [
+    {
+      "model": "LogReg",
+      "variant": "none",
+      "f1": 0.505,
+      "sd": 0.196
+    },
+    {
+      "model": "LogReg",
+      "variant": "jitter",
+      "f1": 0.516,
+      "sd": 0.203
+    },
+    {
+      "model": "LogReg",
+      "variant": "scaling",
+      "f1": 0.552,
+      "sd": 0.179
+    },
+    {
+      "model": "LogReg",
+      "variant": "jitter+scaling",
+      "f1": 0.518,
+      "sd": 0.249
+    },
+    {
+      "model": "LogReg",
+      "variant": "jitter+scaling x4",
+      "f1": 0.525,
+      "sd": 0.238
+    },
+    {
+      "model": "LightGBM",
+      "variant": "none",
+      "f1": 0.572,
+      "sd": 0.075
+    },
+    {
+      "model": "LightGBM",
+      "variant": "jitter",
+      "f1": 0.529,
+      "sd": 0.177
+    },
+    {
+      "model": "LightGBM",
+      "variant": "scaling",
+      "f1": 0.507,
+      "sd": 0.109
+    },
+    {
+      "model": "LightGBM",
+      "variant": "jitter+scaling",
+      "f1": 0.521,
+      "sd": 0.118
+    },
+    {
+      "model": "LightGBM",
+      "variant": "jitter+scaling x4",
+      "f1": 0.542,
+      "sd": 0.12
+    }
+  ],
+  "enose_classes": {
+    "excellent": 1680,
+    "good": 2820,
+    "acceptable": 2100,
+    "spoiled": 4200
+  },
+  "enose_rows": 10800,
+  "enose_shap_sensors": {
+    "MQ4": 4.22,
+    "MQ8": 3.238,
+    "MQ3": 1.426,
+    "MQ9": 0.862,
+    "MQ136": 0.574,
+    "MQ2": 0.511,
+    "MQ5": 0.308,
+    "MQ135": 0.255,
+    "MQ6": 0.242,
+    "Humidity": 0.119
+  },
+  "sol_split": [
+    {
+      "model": "LightGBM",
+      "split": "random",
+      "features": "AqSolDB-17",
+      "rmse": 1.081,
+      "r2": 0.794
+    },
+    {
+      "model": "RandomForest",
+      "split": "random",
+      "features": "AqSolDB-17",
+      "rmse": 1.086,
+      "r2": 0.792
+    },
+    {
+      "model": "LightGBM",
+      "split": "random",
+      "features": "RDKit-2D",
+      "rmse": 1.013,
+      "r2": 0.819
+    },
+    {
+      "model": "RandomForest",
+      "split": "random",
+      "features": "RDKit-2D",
+      "rmse": 1.067,
+      "r2": 0.8
+    },
+    {
+      "model": "LightGBM",
+      "split": "scaffold",
+      "features": "AqSolDB-17",
+      "rmse": 1.329,
+      "r2": 0.714
+    },
+    {
+      "model": "RandomForest",
+      "split": "scaffold",
+      "features": "AqSolDB-17",
+      "rmse": 1.334,
+      "r2": 0.712
+    },
+    {
+      "model": "LightGBM",
+      "split": "scaffold",
+      "features": "RDKit-2D",
+      "rmse": 1.254,
+      "r2": 0.746
+    },
+    {
+      "model": "RandomForest",
+      "split": "scaffold",
+      "features": "RDKit-2D",
+      "rmse": 1.306,
+      "r2": 0.724
+    }
+  ],
+  "sol_models": [
+    {
+      "model": "Ridge",
+      "rmse": 1.668,
+      "r2": 0.55,
+      "mae": 1.164
+    },
+    {
+      "model": "KNN",
+      "rmse": 1.495,
+      "r2": 0.639,
+      "mae": 1.071
+    },
+    {
+      "model": "SVR-RBF",
+      "rmse": 1.335,
+      "r2": 0.712,
+      "mae": 0.866
+    },
+    {
+      "model": "DecisionTree",
+      "rmse": 1.706,
+      "r2": 0.529,
+      "mae": 1.147
+    },
+    {
+      "model": "RandomForest",
+      "rmse": 1.306,
+      "r2": 0.724,
+      "mae": 0.88
+    },
+    {
+      "model": "XGBoost",
+      "rmse": 1.281,
+      "r2": 0.735,
+      "mae": 0.827
+    },
+    {
+      "model": "LightGBM",
+      "rmse": 1.254,
+      "r2": 0.746,
+      "mae": 0.815
+    },
+    {
+      "model": "Stacking",
+      "rmse": 1.222,
+      "r2": 0.758,
+      "mae": 0.79
+    },
+    {
+      "model": "LightGBM-Optuna",
+      "rmse": 1.259,
+      "r2": 0.744,
+      "mae": 0.84
+    }
+  ],
+  "sol_weighted_overall": {
+    "rmse": 1.279,
+    "r2": 0.735,
+    "mae": 0.847
+  },
+  "sol_per_bin": [
+    {
+      "bin": "very_insoluble(<-6)",
+      "n": 208,
+      "mae_unweighted": 1.484,
+      "mae_weighted": 1.386
+    },
+    {
+      "bin": "insoluble(-6..-4)",
+      "n": 307,
+      "mae_unweighted": 0.962,
+      "mae_weighted": 0.992
+    },
+    {
+      "bin": "slightly(-4..-2)",
+      "n": 480,
+      "mae_unweighted": 0.69,
+      "mae_weighted": 0.766
+    },
+    {
+      "bin": "soluble(-2..0)",
+      "n": 639,
+      "mae_unweighted": 0.607,
+      "mae_weighted": 0.657
+    },
+    {
+      "bin": "highly(>=0)",
+      "n": 362,
+      "mae_unweighted": 0.979,
+      "mae_weighted": 0.858
+    }
+  ],
+  "sol_shap_top": {
+    "MolLogP": 0.577,
+    "MolMR": 0.32,
+    "PEOE_VSA6": 0.216,
+    "LabuteASA": 0.137,
+    "SlogP_VSA2": 0.129,
+    "MinPartialCharge": 0.102,
+    "HeavyAtomMolWt": 0.101,
+    "VSA_EState9": 0.089,
+    "MaxAbsPartialCharge": 0.079,
+    "Chi0v": 0.075
+  },
+  "sol_meta": {
+    "n": 9982,
+    "n_scaffolds": 4886,
+    "n_rdkit_features": 207,
+    "n_train": 7986,
+    "n_test": 1996,
+    "test_scaffolds_seen_in_train": 0,
+    "optuna_best_params": {
+      "n_estimators": 900,
+      "learning_rate": 0.02438654234190407,
+      "num_leaves": 26,
+      "min_child_samples": 43,
+      "subsample": 0.6694966786381638,
+      "colsample_bytree": 0.3375681232925111,
+      "reg_lambda": 0.2692879413351827
+    },
+    "optuna_best_cv_rmse": 1.0631208528606966
+  },
+  "al_solubility": {
+    "n_labelled": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000,
+      2100
+    ],
+    "curves": {
+      "bandit-eps": [
+        1.84,
+        1.777,
+        1.681,
+        1.586,
+        1.581,
+        1.536,
+        1.515,
+        1.505,
+        1.487,
+        1.481,
+        1.464,
+        1.451,
+        1.441,
+        1.438,
+        1.444,
+        1.439,
+        1.431,
+        1.428,
+        1.418,
+        1.414,
+        1.41
+      ],
+      "bandit-ucb": [
+        1.84,
+        1.777,
+        1.681,
+        1.586,
+        1.581,
+        1.536,
+        1.506,
+        1.506,
+        1.481,
+        1.471,
+        1.471,
+        1.457,
+        1.45,
+        1.446,
+        1.436,
+        1.438,
+        1.431,
+        1.425,
+        1.417,
+        1.414,
+        1.41
+      ],
+      "diversity": [
+        1.84,
+        1.667,
+        1.613,
+        1.58,
+        1.552,
+        1.534,
+        1.513,
+        1.51,
+        1.506,
+        1.5,
+        1.504,
+        1.5,
+        1.5,
+        1.477,
+        1.464,
+        1.456,
+        1.453,
+        1.455,
+        1.454,
+        1.455,
+        1.44
+      ],
+      "random": [
+        1.84,
+        1.777,
+        1.75,
+        1.669,
+        1.639,
+        1.609,
+        1.58,
+        1.562,
+        1.545,
+        1.523,
+        1.511,
+        1.514,
+        1.506,
+        1.504,
+        1.489,
+        1.5,
+        1.499,
+        1.489,
+        1.495,
+        1.487,
+        1.478
+      ],
+      "uncertainty": [
+        1.84,
+        1.723,
+        1.674,
+        1.659,
+        1.621,
+        1.589,
+        1.577,
+        1.547,
+        1.508,
+        1.492,
+        1.483,
+        1.477,
+        1.465,
+        1.462,
+        1.45,
+        1.448,
+        1.439,
+        1.43,
+        1.43,
+        1.423,
+        1.412
+      ]
+    },
+    "final": {
+      "bandit-eps": {
+        "mean": 1.41,
+        "sd": 0.013
+      },
+      "bandit-ucb": {
+        "mean": 1.41,
+        "sd": 0.006
+      },
+      "diversity": {
+        "mean": 1.44,
+        "sd": 0.008
+      },
+      "random": {
+        "mean": 1.478,
+        "sd": 0.048
+      },
+      "uncertainty": {
+        "mean": 1.412,
+        "sd": 0.017
+      }
+    },
+    "aulc": {
+      "bandit-eps": 1.513,
+      "bandit-ucb": 1.512,
+      "diversity": 1.523,
+      "random": 1.57,
+      "uncertainty": 1.531
+    },
+    "labels_to_match_random": {
+      "bandit-eps": 1100,
+      "bandit-ucb": 1000,
+      "diversity": 1400,
+      "random": 2100,
+      "uncertainty": 1200
+    },
+    "target_random_final": 1.478,
+    "arm_share": {
+      "bandit-eps": {
+        "diversity": 0.44,
+        "random": 0.29,
+        "uncertainty": 0.27
+      },
+      "bandit-ucb": {
+        "diversity": 0.35,
+        "uncertainty": 0.33,
+        "random": 0.32
+      }
+    },
+    "full_pool_test": 1.372,
+    "pool_size": 6788
+  },
+  "al_enose": {
+    "n_labelled": [
+      40,
+      80,
+      120,
+      160,
+      200,
+      240,
+      280,
+      320,
+      360,
+      400,
+      440,
+      480,
+      520,
+      560,
+      600,
+      640
+    ],
+    "curves": {
+      "bandit-eps": [
+        0.828,
+        0.825,
+        0.824,
+        0.797,
+        0.85,
+        0.854,
+        0.871,
+        0.853,
+        0.787,
+        0.844,
+        0.821,
+        0.828,
+        0.83,
+        0.815,
+        0.841,
+        0.843
+      ],
+      "bandit-ucb": [
+        0.828,
+        0.825,
+        0.824,
+        0.797,
+        0.849,
+        0.833,
+        0.77,
+        0.764,
+        0.766,
+        0.829,
+        0.835,
+        0.836,
+        0.784,
+        0.803,
+        0.795,
+        0.804
+      ],
+      "diversity": [
+        0.828,
+        0.805,
+        0.802,
+        0.813,
+        0.815,
+        0.85,
+        0.852,
+        0.849,
+        0.843,
+        0.832,
+        0.837,
+        0.84,
+        0.838,
+        0.816,
+        0.822,
+        0.834
+      ],
+      "random": [
+        0.828,
+        0.825,
+        0.854,
+        0.862,
+        0.825,
+        0.84,
+        0.848,
+        0.865,
+        0.862,
+        0.867,
+        0.863,
+        0.867,
+        0.874,
+        0.868,
+        0.878,
+        0.883
+      ],
+      "uncertainty": [
+        0.828,
+        0.779,
+        0.818,
+        0.791,
+        0.826,
+        0.805,
+        0.802,
+        0.809,
+        0.804,
+        0.822,
+        0.812,
+        0.835,
+        0.847,
+        0.805,
+        0.806,
+        0.818
+      ]
+    },
+    "final": {
+      "bandit-eps": {
+        "mean": 0.843,
+        "sd": 0.158
+      },
+      "bandit-ucb": {
+        "mean": 0.804,
+        "sd": 0.203
+      },
+      "diversity": {
+        "mean": 0.834,
+        "sd": 0.102
+      },
+      "random": {
+        "mean": 0.883,
+        "sd": 0.05
+      },
+      "uncertainty": {
+        "mean": 0.818,
+        "sd": 0.115
+      }
+    },
+    "aulc": {
+      "bandit-eps": 0.832,
+      "bandit-ucb": 0.809,
+      "diversity": 0.83,
+      "random": 0.857,
+      "uncertainty": 0.813
+    },
+    "labels_to_match_random": {
+      "bandit-eps": null,
+      "bandit-ucb": null,
+      "diversity": null,
+      "random": 640,
+      "uncertainty": null
+    },
+    "target_random_final": 0.883,
+    "arm_share": {
+      "bandit-eps": {
+        "random": 0.387,
+        "uncertainty": 0.32,
+        "diversity": 0.293
+      },
+      "bandit-ucb": {
+        "random": 0.342,
+        "uncertainty": 0.338,
+        "diversity": 0.32
+      }
+    },
+    "full_pool_test": 0.85,
+    "pool_size": 6480
+  }
+}

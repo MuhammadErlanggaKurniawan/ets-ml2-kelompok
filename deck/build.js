@@ -72,11 +72,16 @@ function stat(s, x, y, w, value, label, color = C.accent1) {
     margin: 0, valign: "bottom" });
   s.addText(label, { isTextBox: true, x, y: y + 1.0, w, h: 0.6, fontSize: 13, color: "56676A", margin: 0 });
 }
-const AX = { catAxisLabelColor: "56676A", valAxisLabelColor: "56676A", catAxisLabelFontFace: "+mn-lt",
-  valAxisLabelFontFace: "+mn-lt", catAxisLabelFontSize: 12, valAxisLabelFontSize: 11,
-  dataLabelFontFace: "+mn-lt", dataLabelFontSize: 11, dataLabelColor: H.dk1,
-  valGridLine: { color: "E1E8E6", size: 0.75 }, catGridLine: { style: "none" },
-  titleFontFace: "+mn-lt", titleFontSize: 13, titleColor: H.dk2, legendFontFace: "+mn-lt", legendFontSize: 11 };
+// Charts are PNGs from scripts/make_figures.py: Google Slides drops native chart category labels.
+const FIG = path.join(__dirname, "figures");
+function img(s, name, x, y, w, h) {
+  const file = path.join(FIG, `${name}.png`);
+  const buf = fs.readFileSync(file);
+  const pw = buf.readUInt32BE(16), ph = buf.readUInt32BE(20); // PNG IHDR
+  const scale = Math.min(w / pw, h / ph);
+  const iw = pw * scale, ih = ph * scale;
+  s.addImage({ path: file, x: x + (w - iw) / 2, y: y + (h - ih) / 2, w: iw, h: ih });
+}
 
 // ------------------------------------------------------------------ data helpers
 const byModel = (arr, k = "model") => Object.fromEntries(arr.map((r) => [r[k], r]));
@@ -93,7 +98,7 @@ const ENS_CLS = ["RandomForest", "XGBoost", "LightGBM", "Stacking"];
 pres.addSection({ title: "Pembuka" });
 {
   const s = pres.addSlide({ masterName: "DARK", sectionTitle: "Pembuka" });
-  chip(s, M, 0.9, "₳", C.accent2, C.text2, 0.7);
+  chip(s, M, 0.9, "Rp", C.accent2, C.text2, 0.7);
   s.addText("Belajar dengan Label Mahal", { isTextBox: true, x: M, y: 1.9, w: 11.5, h: 1.3, fontFace: "Cambria",
     fontSize: 54, bold: true, color: C.background1, margin: 0 });
   s.addText("Pipeline ensemble dan active learning berbasis multi-armed bandit untuk penilaian mutu pangan dan senyawa obat",
@@ -117,7 +122,7 @@ pres.addSection({ title: "Pembuka" });
      "Panel sensori 3 penilai, pengamatan sampai 48 jam", "LR · RF · SVM · XGBoost"],
     ["Michael", "Kelarutan air obat", "Deskriptor molekul 2D dari SMILES",
      "Pengukuran laboratorium (LogS)", "Gradient boosting + Optuna + SHAP"],
-    ["Rijal", "Mutu kuning telur puyuh", "Citra RGB kuning telur",
+    ["Rijal", "Kuning telur puyuh", "Citra RGB kuning telur",
      "Yolk Index: telur harus dipecah (destruktif)", "EfficientNet-B0 + XGBoost + BO"],
   ];
   const cw = 3.85, gap = 0.3, y0 = 1.45;
@@ -179,7 +184,7 @@ pres.addSection({ title: "Pembuka" });
   const steps = [
     ["Akuisisi", "Unduh dataset publik + cek SHA-256; jalur Raspberry Pi Erlangga"],
     ["Wrangling", "Fitur kausal sensor, scaffold Bemis–Murcko, 207 deskriptor RDKit"],
-    ["Validasi jujur", "Leave-One-Series-Out dan scaffold split"],
+    ["Validasi jujur", "LOSO per seri dan scaffold split"],
     ["Augmentasi & imbalance", "Jitter, gain scaling, class weight, SMOTE"],
     ["Ensemble", "RF, XGBoost, LightGBM, stacking, Optuna (TPE)"],
     ["Loop bandit", "Agen memilih strategi kueri active learning"],
@@ -201,7 +206,7 @@ pres.addSection({ title: "Pembuka" });
     { text: "semua yang belajar dari data (imputasi, scaling, SMOTE, augmentasi, tuning, reward bandit) di-fit hanya pada data latih/validasi. Data uji hanya untuk pelaporan." },
   ], { isTextBox: true, x: M + 0.3, y: 4.85, w: W - 2 * M - 0.6, h: 0.85, fontSize: 15, valign: "middle", margin: 0,
     color: C.text1 });
-  s.addText("Kode: github.com/MuhammadErlanggaKurniawan/ets-ml2-kelompok · 4 notebook Colab",
+  s.addText("Kode: github.com/MuhammadErlanggaKurniawan/ets-ml2-kelompok · 1 notebook Colab, 13 bagian berurutan",
     { isTextBox: true, x: M, y: 6.0, w: W - 2 * M, h: 0.4, fontSize: 13, color: "56676A", margin: 0 });
   s.addNotes("Pipeline berjalan dari akuisisi sampai loop bandit. Satu aturan dipegang di semua tahap: apa pun yang belajar dari data hanya boleh melihat data latih atau validasi. Semua kode ada di repo GitHub dalam bentuk empat notebook Colab.");
 }
@@ -261,12 +266,7 @@ pres.addSection({ title: "Aspek ML II" });
   const variants = ["none", "jitter", "scaling", "jitter+scaling", "jitter+scaling x4"];
   const labels = ["tanpa", "jitter", "scaling", "jitter+scaling", "×4"];
   const val = (m, v) => D.enose_augment.find((r) => r.model === m && r.variant === v).f1;
-  s.addChart(pres.charts.BAR, [
-    { name: "LogReg", labels, values: variants.map((v) => val("LogReg", v)) },
-    { name: "LightGBM", labels, values: variants.map((v) => val("LightGBM", v)) },
-  ], { x: M, y: 1.35, w: 7.2, h: 4.4, barDir: "col", barGrouping: "clustered", chartColors: [H.accent3, H.accent1],
-    showValue: true, dataLabelPosition: "outEnd", dataLabelFormatCode: "0.00", valAxisMinVal: 0, valAxisMaxVal: 0.7,
-    showTitle: true, title: "Augmentasi (train only) · macro-F1 LOSO 4 kelas", showLegend: true, legendPos: "b", ...AX });
+  img(s, "s07_augment", M, 1.35, 7.2, 4.5);
   const im = (m, v) => D.enose_imbalance.find((r) => r.model === m && r.variant === v);
   const x = 8.2;
   card(s, x, 1.35, W - x - M, 4.4);
@@ -293,13 +293,7 @@ pres.addSection({ title: "Aspek ML II" });
   const names = SINGLE_CLS.concat(ENS_CLS);
   const disp = { LogReg: "Logistic Reg.", "SVM-RBF": "SVM-RBF", KNN: "KNN", DecisionTree: "Decision Tree",
     RandomForest: "Random Forest", XGBoost: "XGBoost", LightGBM: "LightGBM", Stacking: "Stacking" };
-  s.addChart(pres.charts.BAR, [
-    { name: "Model tunggal", labels: names.map((n) => disp[n]), values: names.map((n) => (SINGLE_CLS.includes(n) ? enB[n].f1 : 0)) },
-    { name: "Ensemble", labels: names.map((n) => disp[n]), values: names.map((n) => (ENS_CLS.includes(n) ? enB[n].f1 : 0)) },
-  ], { x: M, y: 1.35, w: 7.6, h: 4.9, barDir: "col", barGrouping: "stacked", chartColors: [H.accent3, H.accent1],
-    showValue: true, dataLabelPosition: "inEnd", dataLabelFormatCode: "0.00;;;", dataLabelColor: H.lt1,
-    valAxisMinVal: 0, valAxisMaxVal: 1, showTitle: true, title: "Biner segar vs tidak segar · macro-F1 LOSO (5 seri)",
-    showLegend: true, legendPos: "b", ...AX, dataLabelColor: H.lt1 });
+  img(s, "s08_enose_ensemble", M, 1.35, 7.6, 4.95);
   const x = 8.6;
   card(s, x, 1.35, W - x - M, 4.9, C.text2);
   s.addText(fmt(enB.XGBoost.f1), { isTextBox: true, x: x + 0.35, y: 1.6, w: 3.4, h: 1.0, fontFace: "Cambria", fontSize: 56,
@@ -322,13 +316,7 @@ pres.addSection({ title: "Aspek ML II" });
   const singles = ["Ridge", "KNN", "SVR-RBF", "DecisionTree"];
   const disp = { DecisionTree: "Decision Tree", RandomForest: "Random Forest", "LightGBM-Optuna": "LightGBM+Optuna" };
   const lab = names.map((n) => disp[n] || n);
-  s.addChart(pres.charts.BAR, [
-    { name: "Model tunggal", labels: lab, values: names.map((n) => (singles.includes(n) ? sol[n].rmse : 0)) },
-    { name: "Ensemble", labels: lab, values: names.map((n) => (!singles.includes(n) ? sol[n].rmse : 0)) },
-  ], { x: M, y: 1.35, w: 7.6, h: 4.9, barDir: "bar", barGrouping: "stacked", chartColors: [H.accent3, H.accent1],
-    showValue: true, dataLabelPosition: "inEnd", dataLabelFormatCode: "0.000;;;", valAxisMinVal: 0, valAxisMaxVal: 1.8,
-    catAxisOrientation: "maxMin", showTitle: true, title: "RMSE uji scaffold (lebih kecil lebih baik)", showLegend: true,
-    legendPos: "b", ...AX, dataLabelColor: H.lt1 });
+  img(s, "s09_sol_ensemble", M, 1.35, 7.6, 4.95);
   const x = 8.6, w = W - x - M;
   card(s, x, 1.35, w, 2.25);
   s.addText(fmt(sol.Stacking.rmse), { isTextBox: true, x: x + 0.3, y: 1.5, w: 2.2, h: 0.9, fontFace: "Cambria", fontSize: 44,
@@ -348,14 +336,8 @@ pres.addSection({ title: "Aspek ML II" });
 
 // ================================================================== 10. imbalanced regression
 {
-  const s = content("Imbalanced regression: ekstrem membaik, tengah memburuk", "Aspek ML II");
-  const lab = ["< −6", "−6..−4", "−4..−2", "−2..0", "≥ 0"];
-  s.addChart(pres.charts.BAR, [
-    { name: "tanpa bobot", labels: lab, values: D.sol_per_bin.map((r) => r.mae_unweighted) },
-    { name: "bobot frekuensi-invers", labels: lab, values: D.sol_per_bin.map((r) => r.mae_weighted) },
-  ], { x: M, y: 1.35, w: 7.6, h: 4.6, barDir: "col", barGrouping: "clustered", chartColors: [H.accent3, H.accent2],
-    showValue: true, dataLabelPosition: "outEnd", dataLabelFormatCode: "0.00", valAxisMinVal: 0, valAxisMaxVal: 1.7,
-    showTitle: true, title: "MAE per kategori LogS (data uji scaffold)", showLegend: true, legendPos: "b", ...AX });
+  const s = content("Bobot imbalance: ekstrem membaik, tengah memburuk", "Aspek ML II");
+  img(s, "s10_sol_imbalance", M, 1.35, 7.6, 4.6);
   const x = 8.6, w = W - x - M;
   card(s, x, 1.35, w, 4.6);
   const ex = D.sol_per_bin;
@@ -406,7 +388,7 @@ pres.addSection({ title: "Reinforcement" });
     { text: " ", options: { breakLine: true, fontSize: 6 } },
     { text: "UCB1", options: { bold: true, color: C.accent1, breakLine: true } },
     { text: "pilih argmax  Q(a) + c·√(2 ln N / n(a))" },
-  ], { isTextBox: true, x: x + 0.3, y: 1.7, w: w - 0.6, h: 2.9, fontSize: 15, color: C.text1, margin: 0 });
+  ], { isTextBox: true, x: x + 0.3, y: 1.7, w: w - 0.6, h: 2.9, fontSize: 15, color: C.text1, margin: 0, valign: "top" });
   text(s, [
     { text: "Kenapa disebut reinforcement: ", options: { bold: true } },
     { text: "ini RL tanpa state (multi-armed bandit), jembatan bandit → RL di materi kuliah. Gagasan mengikuti Active Learning by Learning (Hsu & Lin, AAAI 2015). Data uji tidak pernah dipakai untuk reward." },
@@ -417,14 +399,7 @@ pres.addSection({ title: "Reinforcement" });
 // ================================================================== 12. AL solubility
 {
   const s = content("Kelarutan: bandit menghemat ≈ setengah label", "Reinforcement");
-  const pols = ["random", "uncertainty", "diversity", "bandit-eps", "bandit-ucb"];
-  const names = { random: "random", uncertainty: "uncertainty", diversity: "diversity", "bandit-eps": "bandit ε-greedy", "bandit-ucb": "bandit UCB1" };
-  const labels = alS.n_labelled.map((n) => n.toLocaleString("id-ID"));
-  s.addChart(pres.charts.LINE, pols.map((p) => ({ name: names[p], labels, values: alS.curves[p] })),
-    { x: M, y: 1.35, w: 7.9, h: 4.9, chartColors: [H.accent3, H.accent6, H.accent5, H.accent2, H.accent4],
-      lineSize: 2, lineDataSymbol: "circle", lineDataSymbolSize: 4, valAxisMinVal: 1.3, valAxisMaxVal: 1.9,
-      valAxisLabelFormatCode: "0.0", showTitle: true, title: "RMSE uji scaffold vs jumlah label (rata-rata 5 seed)",
-      showLegend: true, legendPos: "b", ...AX, catAxisLabelFontSize: 10 });
+  img(s, "s12_al_solubility", M, 1.35, 7.9, 4.95);
   const x = 8.9, w = W - x - M;
   const save = 1 - alS.labels_to_match_random["bandit-ucb"] / alS.labels_to_match_random.random;
   card(s, x, 1.35, w, 4.9, C.text2);
@@ -443,18 +418,9 @@ pres.addSection({ title: "Reinforcement" });
 // ================================================================== 13. AL e-nose + batches
 {
   const s = content("E-nose: yang kurang adalah batch, bukan label", "Reinforcement");
-  const pols = ["random", "uncertainty", "diversity", "bandit-eps", "bandit-ucb"];
-  const names = { random: "random", uncertainty: "uncertainty", diversity: "diversity", "bandit-eps": "bandit ε-greedy", "bandit-ucb": "bandit UCB1" };
-  s.addChart(pres.charts.LINE, pols.map((p) => ({ name: names[p], labels: alE.n_labelled.map(String), values: alE.curves[p] })),
-    { x: M, y: 1.35, w: 6.2, h: 4.55, chartColors: [H.accent3, H.accent6, H.accent5, H.accent2, H.accent4], lineSize: 2,
-      lineDataSymbol: "circle", lineDataSymbolSize: 4, valAxisMinVal: 0.7, valAxisMaxVal: 0.95, valAxisLabelFormatCode: "0.00",
-      showTitle: true, title: "Active learning · macro-F1 seri uji vs jumlah label", showLegend: true, legendPos: "b", ...AX,
-      catAxisLabelFontSize: 10 });
+  img(s, "s13_al_enose", M, 1.35, 6.3, 4.6);
   const sc = D.series_curve;
-  s.addChart(pres.charts.BAR, [{ name: "macro-F1", labels: sc.map((r) => r.label), values: sc.map((r) => r.f1) }],
-    { x: 7.05, y: 1.35, w: W - 7.05 - M, h: 4.55, barDir: "bar", chartColors: [H.accent1], showValue: true,
-      dataLabelPosition: "outEnd", dataLabelFormatCode: "0.00", valAxisMinVal: 0, valAxisMaxVal: 1, catAxisOrientation: "maxMin",
-      showTitle: true, title: "Tambah batch vs tambah baris (XGBoost biner)", showLegend: false, ...AX, catAxisLabelFontSize: 11 });
+  img(s, "s13_series_curve", 7.15, 1.35, W - 7.15 - M, 4.6);
   const b4_160 = sc.find((r) => r.label.startsWith("4 seri · 160")).f1, b3 = sc.find((r) => r.label.startsWith("3 seri")).f1;
   text(s, [
     { text: `160 baris dari 4 seri (${fmt(b4_160, 2)}) mengalahkan 6.480 baris dari 3 seri (${fmt(b3, 2)}). `, options: { bold: true } },
@@ -467,16 +433,8 @@ pres.addSection({ title: "Reinforcement" });
 pres.addSection({ title: "Diskusi" });
 {
   const s = content("Apa yang dipelajari model", "Diskusi");
-  const st = Object.entries(D.sol_shap_top).slice(0, 8);
-  s.addChart(pres.charts.BAR, [{ name: "mean |SHAP|", labels: st.map((r) => r[0]), values: st.map((r) => r[1]) }],
-    { x: M, y: 1.35, w: 5.9, h: 4.3, barDir: "bar", chartColors: [H.accent1], showValue: true, dataLabelPosition: "outEnd",
-      dataLabelFormatCode: "0.00", catAxisOrientation: "maxMin", valAxisMinVal: 0, valAxisMaxVal: 0.7, showTitle: true,
-      title: "Kelarutan · LightGBM+Optuna", showLegend: false, ...AX });
-  const se = Object.entries(D.enose_shap_sensors);
-  s.addChart(pres.charts.BAR, [{ name: "mean |SHAP|", labels: se.map((r) => r[0]), values: se.map((r) => r[1]) }],
-    { x: 6.83, y: 1.35, w: W - 6.83 - M, h: 4.3, barDir: "bar", chartColors: [H.accent2], showValue: true,
-      dataLabelPosition: "outEnd", dataLabelFormatCode: "0.00", catAxisOrientation: "maxMin", valAxisMinVal: 0, valAxisMaxVal: 5,
-      showTitle: true, title: "E-nose biner · XGBoost, dijelaskan pada seri uji", showLegend: false, ...AX });
+  img(s, "s14_shap_sol", M, 1.35, 5.9, 4.3);
+  img(s, "s14_shap_enose", 6.83, 1.35, W - 6.83 - M, 4.3);
   text(s, [
     { text: "MolLogP paling berpengaruh, ", options: { bold: true } },
     { text: "konsisten dengan kimia: lipofilisitas berbanding terbalik dengan kelarutan air. " },
@@ -514,7 +472,7 @@ pres.addSection({ title: "Diskusi" });
   s.addText("Kesimpulan", { isTextBox: true, x: M, y: 0.6, w: 8, h: 0.9, fontFace: "Cambria", fontSize: 40, bold: true,
     color: C.background1, margin: 0 });
   const k = [
-    ["Validasi lebih menentukan daripada model", `Split acak ${fmt(split("LightGBM", "random/engineered").f1, 2)} vs LOSO ${fmt(split("LightGBM", "loso/engineered").f1, 2)}`],
+    ["Validasi lebih menentukan daripada model", `Split acak ${fmt(split("LightGBM", "random/engineered").f1)} vs LOSO ${fmt(split("LightGBM", "loso/engineered").f1)}`],
     ["Boosting kuat dan stabil; stacking menang tipis", `XGBoost biner ${fmt(enB.XGBoost.f1, 2)} · stacking RMSE ${fmt(sol.Stacking.rmse, 2)}`],
     ["Bandit hemat label saat masalahnya kekurangan label", `≈ ${pct(1 - alS.labels_to_match_random["bandit-ucb"] / alS.labels_to_match_random.random)} lebih sedikit label di AqSolDB`],
     ["Saat masalahnya domain shift, tambah batch", "Tidak cukup sekadar menambah baris; ini relevan untuk 16 batch Erlangga"],
@@ -533,7 +491,7 @@ pres.addSection({ title: "Diskusi" });
     { text: "Michael: fingerprint + domain shift scaffold", options: { bullet: true, breakLine: true } },
     { text: "Rijal: citra pilot → embedding → bandit AL", options: { bullet: true } },
   ], { isTextBox: true, x: 9.2, y: 2.05, w: W - 8.95 - M - 0.5, h: 3.9, fontSize: 14, color: C.background1, margin: 0,
-    paraSpaceAfter: 8 });
+    paraSpaceAfter: 8, valign: "top" });
   s.addNotes("Empat pesan penutup. Validasi menentukan. Boosting adalah baseline yang kuat. Bandit menghemat label ketika masalahnya memang kekurangan label. Ketika masalahnya pergeseran domain, yang dibutuhkan adalah batch baru. Terima kasih, kami siap menjawab pertanyaan.");
 }
 

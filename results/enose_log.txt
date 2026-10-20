@@ -1,0 +1,115 @@
+E1_split     LightGBM       4-class random/raw  F1=0.992±0.002
+E1_split     RandomForest   4-class random/raw  F1=0.993±0.001
+E1_split     LightGBM       4-class random/engineered  F1=0.998±0.001
+E1_split     RandomForest   4-class random/engineered  F1=0.998±0.001
+E1_split     LightGBM       4-class loso/raw  F1=0.508±0.109
+E1_split     RandomForest   4-class loso/raw  F1=0.469±0.161
+E1_split     LightGBM       4-class loso/engineered  F1=0.572±0.075
+E1_split     RandomForest   4-class loso/engineered  F1=0.503±0.121
+E1_temp      LightGBM       4-class loso/engineered +Temperature F1=0.630±0.085
+E2_models    LogReg         4-class loso/engineered  F1=0.505±0.196
+E2_models    SVM-RBF        4-class loso/engineered  F1=0.435±0.246
+E2_models    KNN            4-class loso/engineered  F1=0.420±0.232
+E2_models    DecisionTree   4-class loso/engineered  F1=0.567±0.122
+E2_models    RandomForest   4-class loso/engineered  F1=0.503±0.121
+E2_models    XGBoost        4-class loso/engineered  F1=0.556±0.072
+E2_models    LightGBM       4-class loso/engineered  F1=0.572±0.075
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+E2_models    Stacking       4-class loso/engineered  F1=0.514±0.184
+E2_models    LogReg         binary  loso/engineered  F1=0.728±0.263
+E2_models    SVM-RBF        binary  loso/engineered  F1=0.688±0.276
+E2_models    KNN            binary  loso/engineered  F1=0.740±0.275
+E2_models    DecisionTree   binary  loso/engineered  F1=0.774±0.247
+E2_models    RandomForest   binary  loso/engineered  F1=0.776±0.182
+E2_models    XGBoost        binary  loso/engineered  F1=0.911±0.058
+E2_models    LightGBM       binary  loso/engineered  F1=0.849±0.117
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+/Users/angga0704/ets-ml2-kelompok/.venv/lib/python3.13/site-packages/sklearn/svm/_base.py:236: FutureWarning: The `probability` parameter was deprecated in 1.9 and will be removed in version 1.11. Use `CalibratedClassifierCV(SVC(), ensemble=False)` instead of `SVC(probability=True)`
+  warnings.warn(
+E2_models    Stacking       binary  loso/engineered  F1=0.790±0.187
+E3_imbalance LogReg         4-class loso/engineered class_weight=None F1=0.505±0.196
+E3_imbalance LogReg         4-class loso/engineered class_weight=balanced F1=0.499±0.196
+E3_imbalance LogReg         4-class loso/engineered SMOTE F1=0.490±0.214
+E3_imbalance LogReg         4-class loso/engineered RandomUnder F1=0.476±0.215
+E3_imbalance LightGBM       4-class loso/engineered class_weight=None F1=0.572±0.075
+E3_imbalance LightGBM       4-class loso/engineered class_weight=balanced F1=0.591±0.134
+E3_imbalance LightGBM       4-class loso/engineered SMOTE F1=0.571±0.129
+E3_imbalance LightGBM       4-class loso/engineered RandomUnder F1=0.584±0.063
+E4_augment   LogReg         4-class loso/engineered none F1=0.505±0.196
+E4_augment   LogReg         4-class loso/engineered jitter F1=0.516±0.203
+E4_augment   LogReg         4-class loso/engineered scaling F1=0.552±0.179
+E4_augment   LogReg         4-class loso/engineered jitter+scaling F1=0.518±0.249
+E4_augment   LogReg         4-class loso/engineered jitter+scaling x4 F1=0.525±0.238
+E4_augment   LightGBM       4-class loso/engineered none F1=0.572±0.075
+E4_augment   LightGBM       4-class loso/engineered jitter F1=0.529±0.177
+E4_augment   LightGBM       4-class loso/engineered scaling F1=0.507±0.109
+E4_augment   LightGBM       4-class loso/engineered jitter+scaling F1=0.521±0.118
+E4_augment   LightGBM       4-class loso/engineered jitter+scaling x4 F1=0.542±0.120

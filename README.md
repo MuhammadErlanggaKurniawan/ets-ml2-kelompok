@@ -37,6 +37,7 @@ Notebook dibangun dari `scripts/build_notebook.py`. Ubah kodenya di sana, lalu j
 | Efek pengolahan data pada Random Forest | 0,681 → 0,782 |
 | Efek augmentasi pada Random Forest | jitter −0,009, variasi kepekaan −0,015 |
 | Agen RL (reward di sesi uji) | 0,61 vs "selalu ikut model" 0,44 |
+| Ayam busuk yang lolos dijual (aturan agen vs ikut model) | 0 vs 254, dengan 47% kasus dicek manual |
 | Tambah sesi latih 1 → 14 | macro-F1 0,58 → 0,75 |
 
 Semua angka ada di `hasil/ringkasan.json`, dan grafiknya ada di folder `hasil/`.

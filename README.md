@@ -50,10 +50,24 @@ Anwar, H., & Anwar, T. (2025). Quality assessment of chicken using machine learn
 Data diunduh langsung dari repositori penulis (`talhaanwarch/chicken_assessment_e-nose`, commit `e7e3ca6`) dan
 dicek dengan SHA-256. Repositori itu tidak mencantumkan lisensi, jadi data mentah **tidak** disimpan di repo ini.
 
+## Eksperimen lanjutan
+
+| Notebook | Isi | Penanggung jawab |
+|---|---|---|
+| [`eksperimen_michael_ensemble.ipynb`](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/eksperimen_michael_ensemble.ipynb) | Extra Trees, LightGBM, jumlah pohon, dan akurasi per sesi | Michael |
+| [`eksperimen_rijal_rl.ipynb`](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/eksperimen_rijal_rl.ipynb) | Seberapa peka agen RL terhadap reward, ambang yakin, dan ε | Rijal |
+
+Kedua notebook memakai data dan fitur yang sama dengan notebook utama, dan dibangun dari `scripts/build_starters.py`.
+
 ## Slide
 
 `deck/ETS_ML2_Kesegaran_Ayam.pptx`, dibangun dari `deck/build.js` dengan angka dari `hasil/ringkasan.json`.
 
-## Arsip
+## Struktur repo
 
-Versi pertama proyek (dua dataset: e-nose daging sapi dan AqSolDB) disimpan di `arsip/v1_dua_dataset/`.
+| Folder | Isi |
+|---|---|
+| `notebooks/` | notebook utama + dua notebook eksperimen lanjutan |
+| `hasil/` | grafik dan `ringkasan.json` dari run notebook utama |
+| `deck/` | slide presentasi dan skrip pembuatnya |
+| `scripts/` | pembuat notebook (`build_notebook.py`, `build_starters.py`) |

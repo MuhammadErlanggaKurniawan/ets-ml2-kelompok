@@ -55,14 +55,14 @@ DISP = {"LogReg": "Logistic Reg.", "DecisionTree": "Decision Tree", "RandomFores
 # --- slide 7: augmentation
 aug = {(r["model"], r["variant"]): r["f1"] for r in D["enose_augment"]}
 var = ["none", "jitter", "scaling", "jitter+scaling", "jitter+scaling x4"]
-lab = ["tanpa", "jitter", "scaling", "jitter +\nscaling", "jitter +\nscaling ×4"]
+lab = ["tanpa", "jitter\n(derau)", "scaling\n(skala)", "jitter +\nscaling", "jitter +\nscaling ×4"]
 fig, ax = plt.subplots(figsize=(7.2, 4.4))
 x = range(len(var))
 b1 = ax.bar([i - 0.2 for i in x], [aug[("LogReg", v)] for v in var], 0.38, color=GREY, label="Logistic Regression")
 b2 = ax.bar([i + 0.2 for i in x], [aug[("LightGBM", v)] for v in var], 0.38, color=TEAL, label="LightGBM")
 label_bars(ax, b1); label_bars(ax, b2)
 ax.set_xticks(list(x), lab); ax.set_ylim(0, 0.7); ax.yaxis.set_major_formatter(comma(1))
-ax.set_title("Augmentasi (hanya data latih) · macro-F1 LOSO, 4 kelas"); ax.grid(axis="y", color=GRID)
+ax.set_title("Skor F1 per jenis augmentasi (↑ lebih baik)"); ax.grid(axis="y", color=GRID)
 ax.set_axisbelow(True); ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=2)
 save(fig, "s07_augment")
 
@@ -76,7 +76,7 @@ for b, r in zip(bars, rows):
     ax.text(b.get_x() + b.get_width() / 2, 0.04, fmt(r["f1"]), ha="center", color="white", fontsize=11,
             fontweight="bold")
 ax.set_ylim(0, 1.15); ax.yaxis.set_major_formatter(comma(1)); ax.tick_params(axis="x", rotation=30)
-ax.set_title("Biner segar vs tidak segar · macro-F1 LOSO (garis = sd antar seri)")
+ax.set_title("E-nose segar vs tidak segar · skor F1 (↑ lebih baik)")
 ax.grid(axis="y", color=GRID); ax.set_axisbelow(True)
 ax.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=GREY), plt.Rectangle((0, 0), 1, 1, color=TEAL)],
           labels=["Model tunggal", "Ensemble"], loc="upper left", ncol=2)
@@ -93,7 +93,7 @@ for b, r in zip(bars, rows):
     b.set_edgecolor(AMBER if r["model"] == best else "none"); b.set_linewidth(2.5)
 label_bars(ax, bars, horizontal=True, inside=True)
 ax.invert_yaxis(); ax.set_xlim(0, 1.8); ax.xaxis.set_major_formatter(comma(1))
-ax.set_title("RMSE uji scaffold (lebih kecil lebih baik)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
+ax.set_title("Kelarutan · error RMSE (↓ lebih baik)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
 save(fig, "s09_sol_ensemble")
 
 # --- slide 10: per-bin MAE
@@ -136,13 +136,37 @@ al_plot(D["al_solubility"], "s12_al_solubility", "AqSolDB · RMSE uji scaffold v
 al_plot(D["al_enose"], "s13_al_enose", "E-nose · macro-F1 seri uji vs jumlah label",
         "macro-F1 (↑)", (0.7, 0.95), "semua pool", 2, (6.4, 4.6))
 
+# --- simple AL chart: random vs bandit UCB1 only
+al = D["al_solubility"]
+need = al["labels_to_match_random"]
+target = al["target_random_final"]
+fig, ax = plt.subplots(figsize=(7.4, 4.6))
+ax.plot(al["n_labelled"], al["curves"]["random"], marker="o", ms=3.5, lw=2, color=GREY, label="pilih acak")
+ax.plot(al["n_labelled"], al["curves"]["bandit-ucb"], marker="o", ms=3.5, lw=2.8, color=RED, label="agen bandit (UCB1)")
+ax.axhline(target, ls=":", lw=1.2, color=INK)
+for n, col in [(need["bandit-ucb"], RED), (need["random"], GREY)]:
+    ax.plot([n], [target], "o", ms=10, mfc="none", mec=col, mew=2.2)
+ax.annotate(f"{need['bandit-ucb']:,} label".replace(",", "."), (need["bandit-ucb"], target), xytext=(0, -26),
+            textcoords="offset points", ha="center", fontsize=11, color=RED, fontweight="bold")
+ax.annotate(f"{need['random']:,} label".replace(",", "."), (need["random"], target), xytext=(-8, 16),
+            textcoords="offset points", ha="right", fontsize=11, color=MUTED, fontweight="bold")
+ax.set_ylim(1.35, 1.9); ax.yaxis.set_major_formatter(comma(1))
+ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{int(v):,}".replace(",", ".")))
+ax.set_xlabel("jumlah data berlabel"); ax.set_ylabel("error RMSE (↓)")
+ax.set_title("Kelarutan · error vs jumlah label (rata-rata 5 percobaan)")
+ax.grid(color=GRID); ax.set_axisbelow(True); ax.legend(loc="upper right")
+save(fig, "al_hemat")
+
 # --- slide 13 right: series curve
 sc = D["series_curve"]
 fig, ax = plt.subplots(figsize=(5.6, 4.6))
 bars = ax.barh([r["label"] for r in sc], [r["f1"] for r in sc], color=[TEAL] * 4 + [AMBER] * 3)
+ax.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=TEAL), plt.Rectangle((0, 0), 1, 1, color=AMBER)],
+          labels=["tambah seri (semua baris)", "4 seri, baris dikurangi"], loc="upper center",
+          bbox_to_anchor=(0.45, -0.1), ncol=2, fontsize=10)
 label_bars(ax, bars, horizontal=True, inside=True)
 ax.invert_yaxis(); ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(comma(1))
-ax.set_title("Tambah seri vs tambah baris (XGBoost biner)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
+ax.set_title("E-nose · skor F1 saat data latih ditambah"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
 save(fig, "s13_series_curve")
 
 # --- slide 14: SHAP
@@ -151,12 +175,12 @@ fig, ax = plt.subplots(figsize=(5.9, 4.3))
 bars = ax.barh([k for k, _ in st], [v for _, v in st], color=TEAL)
 label_bars(ax, bars, 2, horizontal=True)
 ax.invert_yaxis(); ax.set_xlim(0, 0.7); ax.xaxis.set_major_formatter(comma(1))
-ax.set_title("Kelarutan · mean |SHAP| (LightGBM + Optuna)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
+ax.set_title("Kelarutan · fitur paling berpengaruh (SHAP)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
 save(fig, "s14_shap_sol")
 se = list(D["enose_shap_sensors"].items())
 fig, ax = plt.subplots(figsize=(5.9, 4.3))
 bars = ax.barh([k for k, _ in se], [v for _, v in se], color=[RED if k == "MQ135" else AMBER for k, _ in se])
 label_bars(ax, bars, 2, horizontal=True)
 ax.invert_yaxis(); ax.set_xlim(0, 5); ax.xaxis.set_major_formatter(comma(0))
-ax.set_title("E-nose biner · mean |SHAP| per sensor (seri uji)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
+ax.set_title("E-nose · sensor paling berpengaruh (SHAP)"); ax.grid(axis="x", color=GRID); ax.set_axisbelow(True)
 save(fig, "s14_shap_enose")

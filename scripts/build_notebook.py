@@ -722,7 +722,7 @@ md(r"""
 ---
 # Bagian 9 — Reinforcement: *active learning* yang dikendalikan agen bandit
 
-**Masalahnya:** label mahal. Kalau kita hanya sanggup melabeli sedikit data, **data mana yang sebaiknya
+**Masalahnya:** melabeli data itu lama dan mahal. Kalau kita hanya sanggup melabeli sedikit data, **data mana yang sebaiknya
 dilabeli dulu?**
 
 **Active learning** menjawabnya dengan memilih data. Ada beberapa strategi:

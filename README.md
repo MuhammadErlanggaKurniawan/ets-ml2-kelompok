@@ -1,4 +1,4 @@
-# Belajar dengan Label Mahal
+# Prediksi Kesegaran Daging dan Kelarutan Senyawa dengan Machine Learning
 
 Proyek ETS **Machine Learning II** (Sains Data, UPN "Veteran" Jawa Timur), Oktober 2026.
 
@@ -7,14 +7,17 @@ Kelompok:
 - Michael Valencio Erasmo Bagas Ganendra (23083010042)
 - Rijal Apuila Khufi (23083010033)
 
-Ketiga topik skripsi kami punya masalah yang sama: **labelnya mahal**.
+Ketiga topik skripsi kami punya masalah yang sama: data berlabel lama dan mahal didapat.
 - Kesegaran makanan dinilai lewat panel sensori dan penyimpanan sampai 48 jam.
-- Kelarutan obat harus diukur di laboratorium.
+- Kelarutan senyawa obat harus diukur di laboratorium.
 - Mutu kuning telur puyuh hanya bisa diukur dengan memecah telurnya.
 
-Proyek ini membangun satu pipeline (akuisisi → wrangling → augmentasi/imbalance → ensemble →
-*active learning* berbasis *multi-armed bandit* → interpretasi). Pipeline itu diuji pada dua dataset publik,
-dan slot untuk data citra telur sudah disiapkan.
+Proyek ini membangun satu pipeline (akuisisi → pengolahan → pemodelan → evaluasi jujur → penambahan label oleh agen
+*reinforcement learning*). Pipeline itu diuji pada dua dataset publik: e-nose daging sapi dan AqSolDB.
+Empat aspek ML II yang dikerjakan: augmentasi, *imbalanced data*, *ensemble learning*, dan *reinforcement learning*
+(*multi-armed bandit* untuk *active learning*).
+
+Slide presentasi: `deck/ETS_ML2_Presentasi.pptx` (13 slide, 15 menit), dibangun dari `deck/build.js`.
 
 ## Notebook (satu notebook, jalankan di Colab)
 

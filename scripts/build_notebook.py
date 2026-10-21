@@ -25,7 +25,7 @@ def code(src):
 md(rf"""
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/{REPO}/blob/main/notebooks/{NAME})
 
-# Belajar dengan Label Mahal
+# Prediksi Kesegaran Daging dan Kelarutan Senyawa dengan Machine Learning
 ### Proyek ETS Machine Learning II — satu notebook, dari awal sampai akhir
 
 **Kelompok:**
@@ -37,9 +37,9 @@ md(rf"""
 
 ## Cerita proyek ini dalam 4 kalimat
 
-1. Ketiga skripsi kami punya masalah yang sama: **label datanya mahal**.
+1. Ketiga skripsi kami punya masalah yang sama: **data berlabel lama dan mahal didapat**.
    - Kesegaran makanan harus dinilai panel orang setelah disimpan sampai 48 jam.
-   - Kelarutan obat harus diukur di laboratorium.
+   - Kelarutan senyawa obat harus diukur di laboratorium.
    - Mutu kuning telur hanya bisa diukur dengan memecah telurnya.
 2. Jadi pertanyaan proyeknya: **bagaimana mendapat model yang jujur dan bagus dengan label sesedikit mungkin?**
 3. Kami menjawabnya dengan satu pipeline yang sama, dijalankan pada dua dataset publik:

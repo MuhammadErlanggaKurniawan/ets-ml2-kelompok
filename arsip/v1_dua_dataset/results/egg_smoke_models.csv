@@ -1,0 +1,21 @@
+fold,model,smote,macro_f1
+0,LogReg (single),False,0.5798765432098766
+0,LogReg (single),True,0.5727657004830918
+0,XGBoost (hybrid),False,0.7415988062923632
+0,XGBoost (hybrid),True,0.6740481740481741
+1,LogReg (single),False,0.6203127162031271
+1,LogReg (single),True,0.6294824236000706
+1,XGBoost (hybrid),False,0.6825951825951826
+1,XGBoost (hybrid),True,0.7382775119617225
+2,LogReg (single),False,0.5238862050456253
+2,LogReg (single),True,0.5572670062930776
+2,XGBoost (hybrid),False,0.6776167471819646
+2,XGBoost (hybrid),True,0.6690343311347876
+3,LogReg (single),False,0.5528594212804739
+3,LogReg (single),True,0.5428464178464179
+3,XGBoost (hybrid),False,0.5494875909557894
+3,XGBoost (hybrid),True,0.573038073038073
+4,LogReg (single),False,0.5931722372779283
+4,LogReg (single),True,0.5386307910698155
+4,XGBoost (hybrid),False,0.6041655800691945
+4,XGBoost (hybrid),True,0.6563903586125809

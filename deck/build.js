@@ -363,7 +363,7 @@ pres.addSection({ title: S2 });
 // ================================================================== 8. RL agent (Rijal)
 pres.addSection({ title: S3 });
 {
-  const s = content("Reinforcement learning: agen pengambil keputusan", S3, "Rijal");
+  const s = content("Reinforcement learning: agen keputusan", S3, "Rijal");
   const lw = 6.3;
   card(s, M, 1.35, lw, 4.45);
   label(s, "Unsur RL", M + 0.3, 1.55, lw - 0.6);

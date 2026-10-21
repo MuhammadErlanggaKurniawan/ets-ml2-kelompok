@@ -22,7 +22,7 @@ membentuk **hidung elektronik (e-nose)**. Proyek ini menebak kondisi ayam (**Fre
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/ETS_ML2_Kesegaran_Ayam.ipynb)
 
 `notebooks/ETS_ML2_Kesegaran_Ayam.ipynb` berisi 11 bagian berurutan, dari akuisisi data sampai kesimpulan.
-Pilih **Runtime → Run all** (sekitar 5 menit, tanpa GPU). File di GitHub sudah berisi hasil run, jadi bisa
+Pilih **Runtime → Run all** (sekitar 10 menit di Colab, tanpa GPU). File di GitHub sudah berisi hasil run, jadi bisa
 dibaca tanpa menjalankan ulang.
 
 Notebook dibangun dari `scripts/build_notebook.py`. Ubah kodenya di sana, lalu jalankan

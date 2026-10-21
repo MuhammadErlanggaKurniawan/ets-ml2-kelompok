@@ -49,7 +49,7 @@ SETUP_MD = ("markdown", r"""
 ---
 ## Langkah 0 — Siapkan data (sama dengan notebook utama)
 Sel ini mengunduh data, membuat label, merangkum per 5 menit, dan membuat 19 fitur. Cukup dijalankan, tidak perlu
-diubah. Butuh ±10 detik.
+diubah. Butuh sekitar 30 detik.
 """)
 SETUP_CODE = ("code", r"""
 import hashlib, urllib.request, warnings

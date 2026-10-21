@@ -71,7 +71,7 @@ Sensor gas murah seri **MQ** bisa "mencium" gas itu. Rangkaian beberapa sensor g
 | 11 | **Ringkasan semua angka** + kesimpulan | presentasi (30%) |
 
 ## Cara menjalankan
-Pilih menu **Runtime → Run all**. Tidak perlu GPU. Waktunya sekitar 5 menit di Colab.
+Pilih menu **Runtime → Run all**. Tidak perlu GPU. Waktunya sekitar 10 menit di Colab (sekitar 1 menit di laptop).
 Semua grafik dan angka disimpan di folder `hasil/`.
 Setiap bagian diakhiri kotak **📌 Hasil**, yang angkanya ditulis otomatis dari hasil run.
 """)
@@ -421,6 +421,11 @@ Mirip minta pendapat banyak orang sebelum mengambil keputusan.
 
 Pengaturan setiap model **ditetapkan dari awal**. Kita tidak mengutak-atik pengaturan berdasarkan data uji,
 karena itu juga termasuk curang.
+
+**Catatan:** angka XGBoost dan Voting bisa berbeda sekitar ±0,02 kalau dijalankan di jenis komputer lain
+(misalnya laptop Mac vs Google Colab), karena XGBoost menghitung secara paralel dan pembulatan angkanya sedikit
+berbeda antar prosesor. Angka di slide berasal dari run yang tersimpan di notebook ini. Model lain dan
+kesimpulannya tidak berubah: semua ensemble tetap di atas semua model tunggal.
 """)
 code(r"""
 def make_xgb():

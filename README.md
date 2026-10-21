@@ -71,3 +71,24 @@ Kedua notebook memakai data dan fitur yang sama dengan notebook utama, dan diban
 | `hasil/` | grafik dan `ringkasan.json` dari run notebook utama |
 | `deck/` | slide presentasi dan skrip pembuatnya |
 | `scripts/` | pembuat notebook (`build_notebook.py`, `build_starters.py`) |
+
+## Kontribusi dan penggunaan AI
+
+| Anggota | Peran |
+|---|---|
+| Muhammad Erlangga Kurniawan | Koordinator. Menentukan topik dan arah proyek, yaitu kesegaran makanan dengan sensor gas MQ-135 sesuai skripsinya. Meninjau dan menyetujui setiap pendekatan, memeriksa hasil notebook dan slide, serta menyiapkan materi presentasi. |
+| Michael Valencio Erasmo Bagas Ganendra | Penanggung jawab eksperimen lanjutan ensemble (`eksperimen_michael_ensemble.ipynb`) dan presentasi bagian cara uji, ensemble, dan augmentasi. |
+| Rijal Apuila Khufi | Penanggung jawab eksperimen lanjutan reinforcement learning (`eksperimen_rijal_rl.ipynb`) dan presentasi bagian reinforcement learning dan diskusi. |
+
+**Penggunaan AI.** Kami memakai asisten AI (Claude) sebagai alat bantu untuk:
+- menulis dan merapikan kode,
+- menyusun draf penjelasan dan slide,
+- mengecek konsistensi angka antar materi.
+
+Yang dikerjakan dan dipertanggungjawabkan oleh kelompok:
+- pemilihan topik dan arah proyek,
+- keputusan pendekatan (misalnya satu dataset, cara uji per sesi, dan aspek ML II yang dipakai),
+- pemeriksaan hasil,
+- penyampaian presentasi.
+
+Semua angka dapat dijalankan ulang dari notebook.

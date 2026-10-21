@@ -83,7 +83,7 @@ md(r"""
 Memuat *library*. Semua sudah tersedia di Google Colab.
 """)
 code(r"""
-import hashlib, json, subprocess, sys, urllib.request, warnings
+import hashlib, importlib.metadata, json, subprocess, sys, urllib.request, warnings
 from pathlib import Path
 
 import numpy as np
@@ -93,17 +93,24 @@ from IPython.display import Markdown, display
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
-from sklearn.model_selection import GroupKFold, LeaveOneGroupOut, StratifiedKFold
+from sklearn.model_selection import LeaveOneGroupOut, StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
+# same XGBoost version as the run behind the slides, so XGBoost and Voting give the same numbers everywhere
+XGB_VERSION = "3.4.1"
 try:
-    from xgboost import XGBClassifier
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "xgboost"])
-    from xgboost import XGBClassifier
+    installed = importlib.metadata.version("xgboost")
+except importlib.metadata.PackageNotFoundError:
+    installed = None
+if installed != XGB_VERSION:
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", f"xgboost=={XGB_VERSION}"])
+    except subprocess.CalledProcessError:
+        print(f"Gagal memasang xgboost {XGB_VERSION}; memakai versi {installed}. Angka XGBoost bisa sedikit beda.")
+from xgboost import XGBClassifier
 
 warnings.filterwarnings("ignore")
 SEED = 42
@@ -616,7 +623,7 @@ busuk dianggap paling berbahaya.
 | Buang | −1 (mubazir) | +1 |
 
 **Agar jujur:** agen belajar dari 12 sesi dan **dinilai pada 3 sesi lain** (5 putaran, setiap sesi pernah jadi
-ujian). Tebakan Random Forest yang dipakai berasal dari model yang tidak pernah melihat sesi tersebut.
+ujian). Pembagian sesinya ditulis tetap supaya hasilnya sama di komputer mana pun. Tebakan Random Forest yang dipakai berasal dari model yang tidak pernah melihat sesi tersebut.
 """)
 code(r"""
 proba_rf = probabilities["Random Forest"]
@@ -646,7 +653,9 @@ def train_agent(train_idx, test_idx, seed, steps=3000, eps=0.1, every=100):
     return Q, np.array(curve)
 
 
-folds = list(GroupKFold(5).split(X, y, groups))
+# fixed session split: GroupKFold orders equal-sized sessions differently on different machines
+RL_TEST_SESSIONS = [[0, 10, 11], [2, 8, 13], [1, 6, 9], [4, 7, 14], [3, 5, 12]]
+folds = [(np.flatnonzero(~np.isin(groups, test)), np.flatnonzero(np.isin(groups, test))) for test in RL_TEST_SESSIONS]
 curves, policies, trust_model, always_check, random_act = [], [], [], [], []
 for train_idx, test_idx in folds:
     for seed in range(5):

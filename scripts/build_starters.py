@@ -60,7 +60,7 @@ import matplotlib.pyplot as plt
 from IPython.display import display
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score
-from sklearn.model_selection import GroupKFold, LeaveOneGroupOut
+from sklearn.model_selection import LeaveOneGroupOut
 
 warnings.filterwarnings("ignore")
 SEED = 42
@@ -266,7 +266,9 @@ predicted = proba_rf.argmax(axis=1)
 layak = y <= 1                                   # Fresh or Semi-fresh = still fine to sell
 ACTIONS = ["Jual", "Cek manual", "Buang"]
 STATE_NAMES = [f"{c} ({'ragu' if u else 'yakin'})" for c in CLASSES for u in (False, True)]
-FOLDS = list(GroupKFold(5).split(X, y, groups))
+# same fixed session split as the main notebook
+RL_TEST_SESSIONS = [[0, 10, 11], [2, 8, 13], [1, 6, 9], [4, 7, 14], [3, 5, 12]]
+FOLDS = [(np.flatnonzero(~np.isin(groups, t)), np.flatnonzero(np.isin(groups, t))) for t in RL_TEST_SESSIONS]
 
 
 def jalankan_agen(jual_layak=1.0, jual_busuk=-5.0, cek=0.5, buang_layak=-1.0, buang_busuk=1.0,

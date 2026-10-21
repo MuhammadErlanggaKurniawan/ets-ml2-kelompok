@@ -46,7 +46,7 @@ pres.defineSlideMaster({
   margin: [0.5, 0.6, 0.6, 0.6],
   objects: [
     { placeholder: { options: { name: "title", type: "title", x: M, y: 0.35, w: W - 2 * M - 2.3, h: 0.85,
-        fontFace: "Cambria", fontSize: 30, bold: true, color: C.text2, valign: "middle", margin: 0 },
+        fontFace: "Cambria", fontSize: 30, bold: true, color: C.text2, valign: "middle", align: "left", margin: 0 },
       text: "" } },
     { text: { text: "ETS Machine Learning II · Prediksi Kesegaran Daging & Kelarutan Senyawa",
         options: { x: M, y: 7.0, w: 8, h: 0.3, fontSize: 10, color: "7A8A8C", margin: 0 } } },
@@ -123,15 +123,19 @@ pres.addSection({ title: "Erlangga: latar belakang & data" });
 {
   const s = pres.addSlide({ masterName: "DARK", sectionTitle: "Erlangga: latar belakang & data" });
   label(s, "Tugas ETS · Machine Learning II", M, 0.95, 8, C.accent2);
-  s.addText(TITLE, { isTextBox: true, x: M, y: 1.4, w: 11.6, h: 2.0, fontFace: "Cambria", fontSize: 44, bold: true,
+  s.addText([
+    { text: "Prediksi Kesegaran Daging dan", options: { breakLine: true } },
+    { text: "Kelarutan Senyawa", options: { breakLine: true } },
+    { text: "dengan Machine Learning" },
+  ], { isTextBox: true, x: M, y: 1.35, w: 11.6, h: 2.3, fontFace: "Cambria", fontSize: 40, bold: true,
     color: C.background1, margin: 0, valign: "top" });
   s.addText("Satu pipeline dari akuisisi data sampai model: augmentasi, imbalance, ensemble, dan reinforcement learning",
-    { isTextBox: true, x: M, y: 3.5, w: 10.5, h: 0.9, fontSize: 20, color: LIGHT, margin: 0 });
+    { isTextBox: true, x: M, y: 3.8, w: 10.5, h: 0.8, fontSize: 19, color: LIGHT, margin: 0 });
   s.addText([
     { text: "Muhammad Erlangga Kurniawan · 23083010045", options: { breakLine: true } },
     { text: "Michael Valencio Erasmo Bagas Ganendra · 23083010042", options: { breakLine: true } },
     { text: "Rijal Apuila Khufi · 23083010033" },
-  ], { isTextBox: true, x: M, y: 4.75, w: 8, h: 1.2, fontSize: 15, color: C.background1, margin: 0,
+  ], { isTextBox: true, x: M, y: 4.95, w: 8, h: 1.2, fontSize: 15, color: C.background1, margin: 0,
     paraSpaceAfter: 4 });
   s.addText("Program Studi Sains Data · UPN \"Veteran\" Jawa Timur · Oktober 2026",
     { isTextBox: true, x: M, y: 6.55, w: 11, h: 0.4, fontSize: 12, color: "9FB8B3", margin: 0 });
@@ -338,12 +342,12 @@ pres.addSection({ title: "Michael: imbalance, augmentasi, ensemble" });
 {
   const s = content("Ensemble: gabungan model menang", "Michael: imbalance, augmentasi, ensemble", "Michael");
   text(s, [
-    { text: "Ensemble = menggabungkan banyak model.  ", options: { bold: true } },
-    { text: "Bagging: Random Forest  ·  Boosting: XGBoost, LightGBM  ·  Stacking: satu model menggabungkan prediksi model lain" },
-  ], { x: M, y: 1.3, w: W - 2 * M, h: 0.5, fontSize: 15 });
+    { text: "Ensemble = gabungan banyak model:  ", options: { bold: true } },
+    { text: "Random Forest (bagging) · XGBoost, LightGBM (boosting) · Stacking (model penggabung)" },
+  ], { x: M, y: 1.3, w: W - 2 * M, h: 0.4, fontSize: 15 });
   const cw = (W - 2 * M - 0.33) / 2;
-  img(s, "s08_enose_ensemble", M, 1.85, cw, 3.85);
-  img(s, "s09_sol_ensemble", M + cw + 0.33, 1.85, cw, 3.85);
+  img(s, "s08_enose_ensemble", M, 1.8, cw, 3.9);
+  img(s, "s09_sol_ensemble", M + cw + 0.33, 1.8, cw, 3.9);
   const ratio = Math.round(enB.DecisionTree.sd / enB.XGBoost.sd);
   const drop = Math.round((1 - sol.Stacking.rmse / bestSingleSol.rmse) * 100);
   [[M, [
@@ -413,7 +417,7 @@ pres.addSection({ title: "Rijal: reinforcement, diskusi, kesimpulan" });
     [`${fmt(sc["1 seri"], 2)} → ${fmt(sc["4 seri"], 2)}`, "F1 naik saat potongan daging (seri) ditambah dari 1 ke 4"],
     [`${fmt(sc["4 seri · 160 baris"], 2)} > ${fmt(sc["3 seri"], 2)}`,
       `160 baris dari 4 seri mengalahkan ${num(rows3)} baris dari 3 seri`],
-    [`${fmt(alE.final.random.mean, 2)}`, "Di e-nose, pemilihan acak tetap terbaik: masalahnya beda kondisi antar seri, bukan kurang label"],
+    [`acak ${fmt(alE.final.random.mean, 2)}`, "Di e-nose, pemilihan acak tetap terbaik: masalahnya beda kondisi antar seri, bukan kurang label"],
   ];
   items.forEach((it, i) => {
     const y = 1.35 + i * 1.53;
@@ -447,7 +451,7 @@ pres.addSection({ title: "Rijal: reinforcement, diskusi, kesimpulan" });
       color: C.accent1, margin: 0 });
     s.addText(b[1].map((t, j) => ({ text: t, options: { bullet: true, breakLine: j < b[1].length - 1 } })),
       { isTextBox: true, x: x + 0.3, y: y + 0.68, w: cw - 0.6, h: ch - 0.85, fontSize: 15, color: C.text1, margin: 0,
-        paraSpaceAfter: 5 });
+        paraSpaceAfter: 5, valign: "top" });
   });
   s.addNotes(`[Rijal] Analisis dan diskusi. Batasan: e-nose hanya 5 potongan daging sehingga hasilnya naik-turun; data ini daging mentah, bukan data skripsi Erlangga; dan active learning masih simulasi karena labelnya sudah ada. Trade-off: augmentasi membantu model sederhana tetapi merugikan boosting; bobot imbalance memperbaiki kelas ekstrem tetapi error total sedikit naik; stacking paling akurat tetapi paling lama dilatih. Sumber galat: beda kondisi ruang antar potongan daging, senyawa uji yang kerangkanya belum pernah dilihat, dan tuning Optuna yang terlalu pas di validasi: ${fmt(D.sol_meta.optuna_best_cv_rmse)} di validasi, ${fmt(sol["LightGBM-Optuna"].rmse)} di uji. Pengembangan: menjalankan pipeline ini pada 16 batch data Erlangga, active learning untuk foto telur supaya lebih sedikit telur yang dipecah, dan menguji sensor MQ4 dan MQ8.`);
 }
@@ -466,19 +470,24 @@ pres.addSection({ title: "Rijal: reinforcement, diskusi, kesimpulan" });
   k.forEach((r, i) => {
     const y = 1.85 + i * 1.1;
     chip(s, M, y + 0.05, String(i + 1), C.accent2, C.text2, 0.55);
-    s.addText(r[0], { isTextBox: true, x: M + 0.85, y, w: 7.3, h: 0.45, fontSize: 19, bold: true, color: C.background1,
+    s.addText(r[0], { isTextBox: true, x: M + 0.85, y, w: 7.0, h: 0.45, fontSize: 19, bold: true, color: C.background1,
       margin: 0 });
-    s.addText(r[1], { isTextBox: true, x: M + 0.85, y: y + 0.45, w: 7.3, h: 0.4, fontSize: 14, color: LIGHT, margin: 0 });
+    s.addText(r[1], { isTextBox: true, x: M + 0.85, y: y + 0.45, w: 7.0, h: 0.4, fontSize: 14, color: LIGHT, margin: 0 });
   });
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 8.95, y: 1.85, w: W - 8.95 - M, h: 4.25, rectRadius: 0.12,
+  const bx = 8.6, bw2 = W - bx - M;
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: bx, y: 1.85, w: bw2, h: 4.25, rectRadius: 0.12,
     fill: { color: "15494A" }, line: { color: "15494A", width: 0 } });
   s.addText([
-    { text: "Terima kasih", options: { bold: true, color: C.accent2, breakLine: true, fontSize: 26, fontFace: "Cambria" } },
+    { text: "Terima kasih", options: { bold: true, color: C.accent2, breakLine: true, fontSize: 28, fontFace: "Cambria" } },
     { text: " ", options: { breakLine: true, fontSize: 8 } },
-    { text: "Kode & notebook Colab:", options: { breakLine: true, color: LIGHT } },
-    { text: "github.com/MuhammadErlanggaKurniawan/ets-ml2-kelompok", options: { bold: true } },
-  ], { isTextBox: true, x: 9.2, y: 2.1, w: W - 8.95 - M - 0.5, h: 3.8, fontSize: 14, color: C.background1, margin: 0,
-    paraSpaceAfter: 6, valign: "top" });
+    { text: "Kode (GitHub):", options: { breakLine: true, color: LIGHT } },
+    { text: "github.com/MuhammadErlanggaKurniawan", options: { bold: true, breakLine: true } },
+    { text: "/ets-ml2-kelompok", options: { bold: true, breakLine: true } },
+    { text: " ", options: { breakLine: true, fontSize: 8 } },
+    { text: "Notebook Colab (13 bagian):", options: { breakLine: true, color: LIGHT } },
+    { text: "ETS_ML2_Pipeline_Lengkap.ipynb", options: { bold: true } },
+  ], { isTextBox: true, x: bx + 0.3, y: 2.1, w: bw2 - 0.6, h: 3.8, fontSize: 13, color: C.background1, margin: 0,
+    paraSpaceAfter: 4, valign: "top" });
   s.addNotes(`[Rijal] Kesimpulan kami ada empat. Pertama, cara uji yang jujur lebih menentukan daripada model yang canggih: ${fmt(leakRandom)} itu palsu, ${fmt(leakLoso)} yang jujur. Kedua, ensemble menang di kedua data. Ketiga, agen bandit menghemat sekitar ${pct(SAVE)} label di data kelarutan. Keempat, kalau masalahnya perbedaan kondisi antar batch, solusinya menambah batch, bukan menambah baris. Semua kode ada di GitHub dan bisa dijalankan di Colab. Terima kasih, kami siap menerima pertanyaan.`);
 }
 

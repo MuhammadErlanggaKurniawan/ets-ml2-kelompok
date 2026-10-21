@@ -24,6 +24,40 @@
       "akurasi_sesi_terburuk": 0.553030303030303
     }
   },
+  "per_session_accuracy": {
+    "0": 0.8462,
+    "1": 0.5978,
+    "2": 0.6,
+    "3": 0.7935,
+    "4": 0.8188,
+    "5": 0.9312,
+    "6": 0.8264,
+    "7": 0.7065,
+    "8": 0.7619,
+    "9": 0.553,
+    "10": 0.8095,
+    "11": 0.7794,
+    "12": 0.8939,
+    "13": 0.8397,
+    "14": 0.9583
+  },
+  "hardest_sessions": [
+    {
+      "sesi": 9,
+      "akurasi": 0.553030303030303,
+      "puncak_MQ135": 206.0
+    },
+    {
+      "sesi": 1,
+      "akurasi": 0.5978260869565217,
+      "puncak_MQ135": 119.0
+    },
+    {
+      "sesi": 2,
+      "akurasi": 0.6,
+      "puncak_MQ135": 419.0
+    }
+  ],
   "models": [
     {
       "model": "Logistic Regression",
@@ -219,7 +253,17 @@
       2800,
       2900,
       3000
-    ]
+    ],
+    "impact": {
+      "porsi_jual": 0.2880622837370242,
+      "porsi_cek": 0.4717416378316032,
+      "porsi_buang": 0.24019607843137256,
+      "busuk_terjual_agen": 0,
+      "busuk_terjual_ikut_model": 254,
+      "layak_terbuang_agen": 104,
+      "n_busuk": 1128,
+      "n_layak": 2340
+    }
   },
   "session_curve": [
     {

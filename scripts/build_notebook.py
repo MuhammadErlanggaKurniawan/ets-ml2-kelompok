@@ -489,6 +489,11 @@ ensemble = model_table[model_table.jenis == "ensemble"]
 best_single = single.loc[single.macro_f1.idxmax()]
 best_ens = ensemble.loc[ensemble.macro_f1.idxmax()]
 recall = cm.diagonal() / cm.sum(axis=1)
+per_session = pd.Series({int(s): accuracy_score(y[groups == s], best_rf[groups == s]) for s in np.unique(groups)})
+peaks = sessions.set_index("sesi").puncak_MQ135
+hardest = [{"sesi": s, "akurasi": float(a), "puncak_MQ135": float(peaks[s])} for s, a in per_session.nsmallest(3).items()]
+display(pd.DataFrame(hardest).assign(akurasi=lambda d: d.akurasi.map(pct)))
+RESULTS.update(per_session_accuracy=per_session.round(4).to_dict(), hardest_sessions=hardest)
 RESULTS.update(models=model_rows, wrangling={k.replace("\n", " "): v for k, v in wrangling.items()},
                confusion_rf=cm.tolist(), recall_rf=dict(zip(CLASSES, recall.round(3).tolist())))
 result_box(f'''
@@ -500,6 +505,8 @@ result_box(f'''
   {fmt(model_table.set_index("model").macro_f1["Decision Tree"])}.
 - Pengolahan data menaikkan Random Forest dari {fmt(list(wrangling.values())[0])} ke {fmt(list(wrangling.values())[-1])}.
 - Kelas yang paling sulit: **Semi-fresh** (recall {recall[1]:.0%}), karena letaknya di tengah, di antara segar dan busuk.
+- Sesi tersulit: {", ".join(f"sesi {h['sesi']} ({pct(h['akurasi'])}, puncak MQ-135 {h['puncak_MQ135']:.0f})" for h in hardest)}.
+  Median puncak MQ-135 semua sesi: {peaks.median():.0f}.
 ''')
 """)
 
@@ -668,11 +675,24 @@ policy_mode = [int(np.bincount([p[s] for p in policies], minlength=3).argmax()) 
 policy_table = pd.DataFrame({"state": STATE_NAMES, "jumlah data": np.bincount(state, minlength=6),
                              "aksi yang dipelajari": [ACTIONS[a] for a in policy_mode]})
 display(policy_table)
+
+# what the learned rules do when applied to every window
+action = np.array(policy_mode)[state]
+impact = {"porsi_jual": float((action == 0).mean()), "porsi_cek": float((action == 1).mean()),
+          "porsi_buang": float((action == 2).mean()),
+          "busuk_terjual_agen": int(((action == 0) & ~fit_to_sell).sum()),
+          "busuk_terjual_ikut_model": int(((predicted <= 1) & ~fit_to_sell).sum()),
+          "layak_terbuang_agen": int(((action == 2) & fit_to_sell).sum()),
+          "n_busuk": int((~fit_to_sell).sum()), "n_layak": int(fit_to_sell.sum())}
+display(pd.DataFrame({"": ["ayam busuk yang terjual", "ayam layak yang terbuang", "kasus yang dicek manual"],
+                      "agen RL": [impact["busuk_terjual_agen"], impact["layak_terbuang_agen"], pct(impact["porsi_cek"])],
+                      "selalu ikut tebakan model": [impact["busuk_terjual_ikut_model"],
+                                                    int(((predicted == 2) & fit_to_sell).sum()), "0%"]}))
 RESULTS["rl"] = {"reward_start": float(curves[:, 0].mean()), "reward_after_100": float(curves[:, 1].mean()),
                  "reward_final": float(agent_final), "trust_model": float(np.mean(trust_model)),
                  "always_check": 0.5, "random_action": float(np.mean(random_act)),
                  "policy": dict(zip(STATE_NAMES, [ACTIONS[a] for a in policy_mode])),
-                 "curve": curves.mean(axis=0).round(4).tolist(), "steps": steps_axis.tolist()}
+                 "curve": curves.mean(axis=0).round(4).tolist(), "steps": steps_axis.tolist(), "impact": impact}
 """)
 md(r"""
 ### Efek tambah data: tambah sesi ayam asli
@@ -715,6 +735,9 @@ result_box(f'''
 - Agen mengalahkan "selalu ikut tebakan model" ({fmt(rl["trust_model"], 2)}) dan "selalu cek manual" (0,50).
 - Agen belajar: tebakan Fresh → **Jual**; Semi-fresh → **Cek manual**; Spoiled yang yakin → **Buang**.
   Cek manual dipakai hanya saat risikonya tinggi.
+- Kalau aturan agen diterapkan ke semua data: ayam busuk yang terjual **{rl["impact"]["busuk_terjual_agen"]}** dari
+  {num(rl["impact"]["n_busuk"])} (kalau sekadar ikut tebakan model: {rl["impact"]["busuk_terjual_ikut_model"]}).
+  Harganya: {pct(rl["impact"]["porsi_cek"])} kasus perlu cek manual.
 - **Tambahan data:** macro-F1 naik dari {fmt(session_curve["mean"].iloc[0], 2)} (1 sesi) ke
   **{fmt(session_curve["mean"].iloc[-1], 2)}** (14 sesi). Kurvanya sedikit naik-turun karena sesi latih dipilih
   acak, tapi arahnya jelas naik.

@@ -1,0 +1,279 @@
+{
+  "n_readings": 218318,
+  "n_sessions": 15,
+  "peak_min": 119.0,
+  "peak_max": 677.0,
+  "n_windows_all": 3828,
+  "n_windows": 3468,
+  "n_features": 19,
+  "class_counts": {
+    "Fresh": 1080,
+    "Semi-fresh": 1260,
+    "Spoiled": 1128
+  },
+  "class_ratio": 1.1666666666666667,
+  "leakage": {
+    "acak": {
+      "akurasi": 0.9694348327566321,
+      "macro_f1": 0.9700744727571741,
+      "akurasi_sesi_terburuk": 0.8106060606060606
+    },
+    "loso": {
+      "akurasi": 0.7759515570934256,
+      "macro_f1": 0.7819733720254566,
+      "akurasi_sesi_terburuk": 0.553030303030303
+    }
+  },
+  "models": [
+    {
+      "model": "Logistic Regression",
+      "jenis": "tunggal",
+      "akurasi": 0.7217416378316033,
+      "macro_f1": 0.7287399957629371,
+      "akurasi_sesi_terburuk": 0.4583333333333333
+    },
+    {
+      "model": "KNN",
+      "jenis": "tunggal",
+      "akurasi": 0.7269319492502884,
+      "macro_f1": 0.7355822196231486,
+      "akurasi_sesi_terburuk": 0.5075757575757576
+    },
+    {
+      "model": "Decision Tree",
+      "jenis": "tunggal",
+      "akurasi": 0.7044405997693195,
+      "macro_f1": 0.7133242057988126,
+      "akurasi_sesi_terburuk": 0.532051282051282
+    },
+    {
+      "model": "Random Forest",
+      "jenis": "ensemble",
+      "akurasi": 0.7759515570934256,
+      "macro_f1": 0.7819733720254566,
+      "akurasi_sesi_terburuk": 0.553030303030303
+    },
+    {
+      "model": "XGBoost",
+      "jenis": "ensemble",
+      "akurasi": 0.7598039215686274,
+      "macro_f1": 0.7648651975524815,
+      "akurasi_sesi_terburuk": 0.5454545454545454
+    },
+    {
+      "model": "Voting",
+      "jenis": "ensemble",
+      "akurasi": 0.7502883506343714,
+      "macro_f1": 0.7561619236225758,
+      "akurasi_sesi_terburuk": 0.5227272727272727
+    }
+  ],
+  "wrangling": {
+    "rata-rata mentah (7 fitur)": 0.680864051071575,
+    "+ level & porsi (13 fitur)": 0.7106228898826874,
+    "+ kenaikan sejak kalibrasi (19 fitur)": 0.7819733720254566
+  },
+  "confusion_rf": [
+    [
+      883,
+      197,
+      0
+    ],
+    [
+      116,
+      934,
+      210
+    ],
+    [
+      0,
+      254,
+      874
+    ]
+  ],
+  "recall_rf": {
+    "Fresh": 0.818,
+    "Semi-fresh": 0.741,
+    "Spoiled": 0.775
+  },
+  "augmentation": [
+    {
+      "augmentasi": "tanpa",
+      "model": "Decision Tree",
+      "akurasi": 0.7044405997693195,
+      "macro_f1": 0.7133242057988126,
+      "akurasi_sesi_terburuk": 0.532051282051282
+    },
+    {
+      "augmentasi": "tanpa",
+      "model": "Random Forest",
+      "akurasi": 0.7759515570934256,
+      "macro_f1": 0.7819733720254566,
+      "akurasi_sesi_terburuk": 0.553030303030303
+    },
+    {
+      "augmentasi": "jitter",
+      "model": "Decision Tree",
+      "akurasi": 0.6963667820069204,
+      "macro_f1": 0.6975940015057928,
+      "akurasi_sesi_terburuk": 0.30434782608695654
+    },
+    {
+      "augmentasi": "jitter",
+      "model": "Random Forest",
+      "akurasi": 0.7673010380622838,
+      "macro_f1": 0.7734728450331078,
+      "akurasi_sesi_terburuk": 0.5454545454545454
+    },
+    {
+      "augmentasi": "kepekaan",
+      "model": "Decision Tree",
+      "akurasi": 0.7159746251441753,
+      "macro_f1": 0.724390343157935,
+      "akurasi_sesi_terburuk": 0.5466666666666666
+    },
+    {
+      "augmentasi": "kepekaan",
+      "model": "Random Forest",
+      "akurasi": 0.7603806228373703,
+      "macro_f1": 0.7666211601763272,
+      "akurasi_sesi_terburuk": 0.5454545454545454
+    }
+  ],
+  "rl": {
+    "reward_start": -0.795725901545213,
+    "reward_after_100": 0.5332668987391526,
+    "reward_final": 0.6057295244735647,
+    "trust_model": 0.44208902833745184,
+    "always_check": 0.5,
+    "random_action": -0.2668625098690619,
+    "policy": {
+      "Fresh (yakin)": "Jual",
+      "Fresh (ragu)": "Jual",
+      "Semi-fresh (yakin)": "Cek manual",
+      "Semi-fresh (ragu)": "Cek manual",
+      "Spoiled (yakin)": "Buang",
+      "Spoiled (ragu)": "Cek manual"
+    },
+    "curve": [
+      -0.7957,
+      0.5333,
+      0.5555,
+      0.5545,
+      0.5926,
+      0.5954,
+      0.5945,
+      0.5913,
+      0.6017,
+      0.5736,
+      0.6016,
+      0.6017,
+      0.6017,
+      0.6054,
+      0.6017,
+      0.5974,
+      0.5973,
+      0.5974,
+      0.5981,
+      0.5974,
+      0.5974,
+      0.5973,
+      0.5915,
+      0.5997,
+      0.5997,
+      0.6047,
+      0.6015,
+      0.6015,
+      0.6057,
+      0.6057,
+      0.6057
+    ],
+    "steps": [
+      1,
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900,
+      1000,
+      1100,
+      1200,
+      1300,
+      1400,
+      1500,
+      1600,
+      1700,
+      1800,
+      1900,
+      2000,
+      2100,
+      2200,
+      2300,
+      2400,
+      2500,
+      2600,
+      2700,
+      2800,
+      2900,
+      3000
+    ]
+  },
+  "session_curve": [
+    {
+      "sesi_latih": 1,
+      "mean": 0.5785,
+      "std": 0.2414
+    },
+    {
+      "sesi_latih": 2,
+      "mean": 0.6029,
+      "std": 0.2105
+    },
+    {
+      "sesi_latih": 4,
+      "mean": 0.6683,
+      "std": 0.2157
+    },
+    {
+      "sesi_latih": 6,
+      "mean": 0.7041,
+      "std": 0.1665
+    },
+    {
+      "sesi_latih": 8,
+      "mean": 0.7419,
+      "std": 0.1432
+    },
+    {
+      "sesi_latih": 10,
+      "mean": 0.7192,
+      "std": 0.1859
+    },
+    {
+      "sesi_latih": 12,
+      "mean": 0.7289,
+      "std": 0.158
+    },
+    {
+      "sesi_latih": 14,
+      "mean": 0.7516,
+      "std": 0.1622
+    }
+  ],
+  "sensor_importance": {
+    "MQ-7": 0.2172,
+    "MQ-3": 0.1993,
+    "MQ-2": 0.1849,
+    "MQ-135": 0.1463,
+    "MQ-9": 0.141,
+    "MQ-6": 0.0951,
+    "Kelembapan": 0.0162
+  },
+  "source": {
+    "paper": "Anwar & Anwar (2025), Sensing and Bio-Sensing Research 47, 100739",
+    "csv_sha256": "7c9920fcfe523af1ee2855d53f13334ddba93db5135d7868b9f63c5cd488d953"
+  }
+}

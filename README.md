@@ -54,20 +54,29 @@ dicek dengan SHA-256. Repositori itu tidak mencantumkan lisensi, jadi data menta
 
 | Notebook | Isi | Penanggung jawab |
 |---|---|---|
-| [`eksperimen_michael_ensemble.ipynb`](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/eksperimen_michael_ensemble.ipynb) | Extra Trees, LightGBM, jumlah pohon, dan akurasi per sesi | Michael |
+| [`eksperimen_michael_ensemble.ipynb`](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/eksperimen_michael_ensemble.ipynb) | Extra Trees, LightGBM, jumlah pohon, dan akurasi per sesi (ringkasan: [`docs/eksperimen_ensemble.md`](docs/eksperimen_ensemble.md)) | Michael |
 | [`eksperimen_rijal_rl.ipynb`](https://colab.research.google.com/github/MuhammadErlanggaKurniawan/ets-ml2-kelompok/blob/main/notebooks/eksperimen_rijal_rl.ipynb) | Seberapa peka agen RL terhadap reward, ambang yakin, dan ε | Rijal |
 
-Kedua notebook memakai data dan fitur yang sama dengan notebook utama, dan dibangun dari `scripts/build_starters.py`.
+Kedua notebook memakai data dan fitur yang sama dengan notebook utama. Kerangka awalnya dibangun dari
+`scripts/build_starters.py`, lalu dijalankan, dimodifikasi, dan disimpulkan oleh penanggung jawab masing-masing.
 
 ## Slide
 
-`deck/ETS_ML2_Kesegaran_Ayam.pptx`, dibangun dari `deck/build.js` dengan angka dari `hasil/ringkasan.json`.
+- Google Slides (12 slide, dengan speaker notes): https://docs.google.com/presentation/d/1mNzQmkBPX-BscWkU1K6p8dY_0TXKSWzyRKjBjTVPhYE/edit
+- File offline: `deck/ETS_ML2_Kesegaran_Ayam.pptx`, dibangun dari `deck/build.js` dengan angka dari `hasil/ringkasan.json`.
+
+| Slide | Isi | Pembicara |
+|---|---|---|
+| 1–4 | Judul, latar belakang, dataset dan alur kerja, data wrangling | Erlangga |
+| 5–7 | Skema validasi (random split vs LOSO), ensemble learning, data augmentation | Michael |
+| 8–11 | Reinforcement learning, penambahan iterasi dan data, hasil dan analisis, simpulan | Rijal |
 
 ## Struktur repo
 
 | Folder | Isi |
 |---|---|
 | `notebooks/` | notebook utama + dua notebook eksperimen lanjutan |
+| `docs/` | ringkasan hasil eksperimen lanjutan |
 | `hasil/` | grafik dan `ringkasan.json` dari run notebook utama |
 | `deck/` | slide presentasi dan skrip pembuatnya |
 | `scripts/` | pembuat notebook (`build_notebook.py`, `build_starters.py`) |
@@ -77,8 +86,8 @@ Kedua notebook memakai data dan fitur yang sama dengan notebook utama, dan diban
 | Anggota | Peran |
 |---|---|
 | Muhammad Erlangga Kurniawan | Koordinator. Menentukan topik dan arah proyek, yaitu kesegaran makanan dengan sensor gas MQ-135 sesuai skripsinya. Meninjau dan menyetujui setiap pendekatan, memeriksa hasil notebook dan slide, serta menyiapkan materi presentasi. |
-| Michael Valencio Erasmo Bagas Ganendra | Penanggung jawab eksperimen lanjutan ensemble (`eksperimen_michael_ensemble.ipynb`) dan presentasi bagian skema validasi, hasil wrangling & augmentasi, dan ensemble learning. |
-| Rijal Apuila Khufi | Penanggung jawab eksperimen lanjutan reinforcement learning (`eksperimen_rijal_rl.ipynb`) dan presentasi bagian reinforcement learning serta hasil dan analisis. |
+| Michael Valencio Erasmo Bagas Ganendra | Penanggung jawab eksperimen lanjutan ensemble (`eksperimen_michael_ensemble.ipynb`) dan presentasi bagian skema validasi, ensemble learning, dan data augmentation. |
+| Rijal Apuila Khufi | Penanggung jawab eksperimen lanjutan reinforcement learning (`eksperimen_rijal_rl.ipynb`) dan presentasi bagian reinforcement learning, hasil dan analisis, serta simpulan. |
 
 **Penggunaan AI.** Kami memakai asisten AI (Claude) sebagai alat bantu untuk:
 - menulis dan merapikan kode,

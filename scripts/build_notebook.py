@@ -24,7 +24,7 @@ def code(src):
 md(rf"""
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/{REPO}/blob/main/notebooks/{NAME})
 
-# Deteksi Kesegaran Daging Ayam dengan Sensor Gas dan Machine Learning
+# Klasifikasi Kesegaran Daging Ayam Berbasis Ensemble dan Reinforcement Learning
 ### Proyek ETS Machine Learning II
 
 **Kelompok:** Muhammad Erlangga Kurniawan (23083010045) · Michael Valencio Erasmo Bagas Ganendra (23083010042) ·
@@ -32,13 +32,13 @@ Rijal Apuila Khufi (23083010033)
 
 ---
 
-## Ceritanya singkat
+## Ringkasan proyek
 
 Daging ayam yang mulai busuk mengeluarkan gas, misalnya amonia dan senyawa organik yang mudah menguap.
-Sensor gas murah seri **MQ** bisa "mencium" gas itu. Rangkaian beberapa sensor gas seperti ini disebut
-**hidung elektronik (e-nose)**.
+Sensor gas murah seri **MQ** dapat mendeteksi gas tersebut. Rangkaian beberapa sensor gas seperti ini disebut
+**electronic nose (e-nose)**.
 
-**Pertanyaan proyek:** dari bacaan sensor saja, bisakah komputer menebak apakah daging ayam masih
+**Pertanyaan proyek:** dari bacaan sensor saja, dapatkah model *machine learning* mengklasifikasikan daging ayam sebagai masih
 **Fresh**, **Semi-fresh**, atau sudah **Spoiled**?
 
 **Data:** satu dataset publik, *e-nose* daging ayam dari Anwar & Anwar (2025). Isinya 7 sensor
@@ -63,7 +63,7 @@ Sensor gas murah seri **MQ** bisa "mencium" gas itu. Rangkaian beberapa sensor g
 | 3 | Kenali datanya | latar belakang |
 | 4 | Membuat label Fresh / Semi-fresh / Spoiled | pengolahan |
 | 5 | **Pengolahan data (wrangling)** | wrangling (15%) |
-| 6 | Cara menguji yang jujur | analisis (25%) |
+| 6 | Skema validasi dan pencegahan *data leakage* | analisis (25%) |
 | 7 | **Ensemble learning** | ensemble (15%) |
 | 8 | **Augmentasi data** | augmentasi (15%) |
 | 9 | **Reinforcement learning** + efek tambah data | reinforcement (15%) |
@@ -92,7 +92,7 @@ import matplotlib.pyplot as plt
 from IPython.display import Markdown, display
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
+from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score
 from sklearn.model_selection import LeaveOneGroupOut, StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
@@ -208,7 +208,7 @@ for s, d in hourly.groupby("sesi"):
 ax.plot([], [], color=TEAL, label="sesi panjang (> 15 jam)")
 ax.plot([], [], color=AMBER, label="sesi pendek (≤ 15 jam)")
 ax.set(xlabel="jam sejak mulai dipantau", ylabel="bacaan MQ-135",
-       title="Gas naik seiring waktu, tapi levelnya beda-beda tiap sesi")
+       title="Bacaan MQ-135 per sesi: pola naik, level berbeda antar sesi")
 ax.legend(loc="upper left")
 save(fig, "01_mq135_per_sesi")
 plt.show()
@@ -236,9 +236,9 @@ CSV tidak punya kolom label. Kita memakai aturan dari notebook penulis, berdasar
 
 Batasnya berbeda karena ayam lebih cepat busuk saat udara lebih hangat.
 
-**Catatan jujur:** label ini berasal dari waktu penyimpanan, bukan dari uji laboratorium per sampel. Jadi label
+**Catatan:** label ini berasal dari waktu penyimpanan, bukan dari uji laboratorium per sampel. Jadi label
 adalah *perkiraan* kondisi ayam. Karena label dibuat dari waktu, **waktu tidak boleh dipakai sebagai fitur**.
-Kalau dipakai, model cuma "membaca jam", bukan mencium ayam.
+Jika waktu dipakai, model hanya mempelajari lama penyimpanan, bukan pola gas (*data leakage*).
 """)
 code(r"""
 long_session = raw.groupby("sesi")["jam"].transform("max") > 15
@@ -257,20 +257,20 @@ md(r"""
 Tiga langkah, dan masing-masing ada alasannya:
 
 **1. Rata-rata per 5 menit.** Sensor membaca ±12 kali per menit, dan bacaan yang berdekatan hampir sama.
-Kita ringkas tiap jam menjadi 12 "jendela" berdurasi 5 menit, lalu ambil rata-ratanya. Data jadi lebih rapi dan
-tidak berisik.
+Setiap jam dibagi menjadi 12 segmen (*window*) berdurasi 5 menit, lalu dirata-ratakan. Data menjadi lebih rapi dan
+*noise* berkurang.
 
-**2. Dua jam pertama = masa kalibrasi.** Sensor gas butuh waktu untuk stabil. Penulis aslinya juga membuang
+**2. Dua jam pertama = masa kalibrasi (*warm-up*) sensor.** Sensor gas butuh waktu untuk stabil. Penulis aslinya juga membuang
 baris awal tiap sesi. Dua jam pertama (selalu Fresh) **tidak ikut dinilai**. Bacaan jam ke-1 dipakai sebagai
-**titik pembanding** untuk sesi itu.
+**baseline** untuk sesi itu.
 
 **3. Membuat 19 fitur yang menggambarkan gas dengan 3 cara**, ditambah kelembapan:
 
 | Kelompok fitur | Artinya | Kenapa perlu |
 |---|---|---|
 | `level_` (6) | seberapa **banyak** gas (skala log) | log membuat angka besar dan kecil sebanding |
-| `porsi_` (6) | **proporsi** tiap sensor dari total gas | polanya tetap sama walau level gas sesi berbeda |
-| `naik_` (6) | seberapa jauh gas **naik dibanding jam ke-1** | mirip Rs/R0 di skripsi Erlangga; menghilangkan beda alat/sampel antar sesi |
+| `proporsi_` (6) | **proporsi relatif** tiap sensor terhadap total gas | polanya tetap sama walau level gas sesi berbeda |
+| `naik_` (6) | **perubahan terhadap baseline** (rata-rata jam ke-1) | mirip Rs/R0 di skripsi Erlangga; menghilangkan beda alat/sampel antar sesi |
 | `Kelembapan` (1) | kelembapan udara | kondisi lingkungan |
 
 Semua fitur hanya memakai data **masa lalu** dari sesi itu sendiri, jadi bisa dihitung langsung di alat sungguhan.
@@ -284,8 +284,8 @@ def make_windows(readings):
     r = readings.copy()
     r["urutan"] = r.groupby(["sesi", "jam"]).cumcount()
     r["n"] = r.groupby(["sesi", "jam"])["jam"].transform("size")
-    r["jendela"] = r.urutan * 12 // r.n
-    return r.groupby(["sesi", "jam", "jendela"]).agg(**{c: (c, "mean") for c in SENSORS},
+    r["segmen"] = r.urutan * 12 // r.n
+    return r.groupby(["sesi", "jam", "segmen"]).agg(**{c: (c, "mean") for c in SENSORS},
                                                     label=("label", "first")).reset_index()
 
 
@@ -298,7 +298,7 @@ def make_features(win):
     level, reference = level[keep].reset_index(drop=True), reference[keep].reset_index(drop=True)
     gas = rows[MQ].clip(lower=0)
     features = pd.concat([level.add_prefix("level_"),
-                          gas.div(gas.sum(axis=1) + 1, axis=0).add_prefix("porsi_"),
+                          gas.div(gas.sum(axis=1) + 1, axis=0).add_prefix("proporsi_"),
                           (level - reference).add_prefix("naik_"),
                           rows[["Kelembapan"]]], axis=1)
     return features, rows
@@ -314,21 +314,21 @@ X_no_rise = features.drop(columns=[c for c in features if c.startswith("naik_")]
 
 class_counts = np.bincount(y, minlength=3)
 ratio = class_counts.max() / class_counts.min()
-print(f"{num(len(raw))} bacaan → {num(len(windows))} jendela 5 menit → {num(len(data))} jendela setelah masa kalibrasi")
-print(f"{X.shape[1]} fitur per jendela")
+print(f"{num(len(raw))} bacaan → {num(len(windows))} segmen 5 menit → {num(len(data))} segmen setelah masa kalibrasi")
+print(f"{X.shape[1]} fitur per segmen")
 display(features.head().round(3))
 
 fig, ax = plt.subplots(figsize=(5.5, 3.6))
 bars = ax.bar(CLASSES, class_counts, color=CLASS_COLORS)
 ax.bar_label(bars, padding=3)
-ax.set(ylabel="jumlah jendela", title="Jumlah data per kelas", ylim=(0, class_counts.max() * 1.18))
+ax.set(ylabel="jumlah segmen", title="Jumlah data per kelas", ylim=(0, class_counts.max() * 1.18))
 save(fig, "02_jumlah_kelas")
 plt.show()
 
 RESULTS.update(n_windows_all=len(windows), n_windows=len(data), n_features=X.shape[1],
                class_counts=dict(zip(CLASSES, class_counts.tolist())), class_ratio=float(ratio))
 result_box(f'''
-- {num(len(raw))} bacaan diringkas menjadi **{num(len(data))} jendela 5 menit** dengan **{X.shape[1]} fitur**.
+- {num(len(raw))} bacaan diringkas menjadi **{num(len(data))} segmen 5 menit** dengan **{X.shape[1]} fitur**.
 - Jumlah per kelas: Fresh {num(class_counts[0])}, Semi-fresh {num(class_counts[1])}, Spoiled {num(class_counts[2])}.
   Perbandingan terbesar : terkecil = **{fmt(ratio, 2)}**, jadi data **cukup seimbang**. Penanganan imbalance
   seperti SMOTE tidak diperlukan.
@@ -338,13 +338,13 @@ result_box(f'''
 # =====================================================================================
 md(r"""
 ---
-# Bagian 6 — Cara menguji yang jujur
+# Bagian 6 — Skema validasi dan pencegahan *data leakage*
 
-**Masalahnya:** jendela 5 menit yang berurutan dalam satu sesi isinya hampir sama. Kalau data dibagi **acak**,
-menit ke-100 bisa masuk data latih dan menit ke-105 masuk data uji. Model cukup "menghafal" sesi itu, dan
-skornya jadi terlalu bagus. Ini disebut **kebocoran data (*data leakage*)**.
+**Masalahnya:** segmen 5 menit yang berurutan dalam satu sesi isinya hampir sama. Kalau data dibagi **acak**,
+menit ke-100 bisa masuk data latih dan menit ke-105 masuk data uji. Model cenderung menghafal pola sesi tersebut, sehingga
+skornya terlalu tinggi (*overestimate*). Kondisi ini disebut **data leakage**.
 
-**Cara yang jujur: Leave-One-Session-Out (LOSO).**
+**Solusinya: validasi Leave-One-Session-Out (LOSO).**
 1. Sembunyikan **1 sesi** sebagai ujian.
 2. Latih model dengan **14 sesi** lainnya.
 3. Ulangi 15 kali sampai setiap sesi pernah jadi ujian.
@@ -352,7 +352,7 @@ skornya jadi terlalu bagus. Ini disebut **kebocoran data (*data leakage*)**.
 Ini meniru kondisi nyata: alat dipakai untuk **ayam baru** yang belum pernah dilihat model.
 
 **Ukuran skor:**
-- **Akurasi:** persentase tebakan yang benar.
+- **Akurasi:** persentase prediksi yang benar.
 - **Macro-F1:** skor 0–1 yang menghitung ketiga kelas secara setara (makin tinggi makin baik). Ini ukuran utama.
 """)
 code(r"""
@@ -388,9 +388,9 @@ leak = {"acak": scores(pred_random), "loso": scores(pred_loso)}
 
 fig, ax = plt.subplots(figsize=(5.8, 3.8))
 vals = [leak["acak"]["akurasi"], leak["loso"]["akurasi"]]
-bars = ax.bar(["dibagi acak\n(bocor)", "per sesi / LOSO\n(jujur)"], vals, color=[RED, TEAL], width=0.55)
+bars = ax.bar(["random split\n(data leakage)", "Leave-One-Session-Out\n(LOSO)"], vals, color=[RED, TEAL], width=0.55)
 ax.bar_label(bars, labels=[pct(v) for v in vals], padding=3, fontweight="bold")
-ax.set(ylim=(0, 1.12), ylabel="akurasi", title="Random Forest: cara membagi data mengubah skor")
+ax.set(ylim=(0, 1.12), ylabel="akurasi", title="Random Forest: random split vs LOSO")
 save(fig, "03_kebocoran")
 plt.show()
 
@@ -419,8 +419,8 @@ Mirip minta pendapat banyak orang sebelum mengambil keputusan.
 | **ensemble – boosting** | **XGBoost** | 200 pohon kecil dibuat berurutan, tiap pohon memperbaiki kesalahan pohon sebelumnya |
 | **ensemble – voting** | **Voting** | gabungan Logistic Regression + Random Forest + XGBoost, peluang ketiganya dirata-rata |
 
-Pengaturan setiap model **ditetapkan dari awal**. Kita tidak mengutak-atik pengaturan berdasarkan data uji,
-karena itu juga termasuk curang.
+Pengaturan setiap model **ditetapkan dari awal**. *Hyperparameter* tidak di-*tuning* menggunakan data uji,
+karena hal itu juga menimbulkan *data leakage*.
 
 **Catatan:** angka XGBoost dan Voting bisa berbeda sekitar ±0,02 kalau dijalankan di jenis komputer lain
 (misalnya laptop Mac vs Google Colab), karena XGBoost menghitung secara paralel dan pembulatan angkanya sedikit
@@ -449,10 +449,14 @@ KIND = {"Logistic Regression": "tunggal", "KNN": "tunggal", "Decision Tree": "tu
 model_rows, predictions, probabilities = [], {}, {}
 for name, make_model in MODELS.items():
     predictions[name], probabilities[name] = loso(make_model, X)
-    model_rows.append({"model": name, "jenis": KIND[name], **scores(predictions[name])})
+    model_rows.append({"model": name, "jenis": KIND[name], **scores(predictions[name]),
+                       "f1_weighted": f1_score(y, predictions[name], average="weighted"),
+                       "recall_spoiled": recall_score(y, predictions[name], labels=[2], average="macro")})
 model_table = pd.DataFrame(model_rows)
 display(model_table.assign(akurasi=model_table.akurasi.map(pct),
                            macro_f1=model_table.macro_f1.round(3),
+                           f1_weighted=model_table.f1_weighted.round(3),
+                           recall_spoiled=model_table.recall_spoiled.map(pct),
                            akurasi_sesi_terburuk=model_table.akurasi_sesi_terburuk.map(pct)))
 
 fig, ax = plt.subplots(figsize=(8.6, 4.2))
@@ -468,19 +472,19 @@ plt.show()
 """)
 md(r"""
 ### Seberapa besar pengaruh pengolahan data?
-Random Forest yang sama dilatih dengan 3 versi fitur: rata-rata mentah saja, tambah level dan porsi, lalu
-tambah kenaikan sejak kalibrasi.
+Random Forest yang sama dilatih dengan 3 versi fitur: rata-rata mentah saja, ditambah log-level dan proporsi relatif, lalu
+ditambah perubahan terhadap baseline.
 """)
 code(r"""
 wrangling = {
     "rata-rata mentah\n(7 fitur)": scores(loso(make_rf, X_raw)[0])["macro_f1"],
-    "+ level & porsi\n(13 fitur)": scores(loso(make_rf, X_no_rise)[0])["macro_f1"],
-    "+ kenaikan sejak\nkalibrasi (19 fitur)": scores(predictions["Random Forest"])["macro_f1"],
+    "+ log-level & proporsi\n(13 fitur)": scores(loso(make_rf, X_no_rise)[0])["macro_f1"],
+    "+ perubahan thd\nbaseline (19 fitur)": scores(predictions["Random Forest"])["macro_f1"],
 }
 fig, ax = plt.subplots(figsize=(6.6, 3.8))
 bars = ax.bar(list(wrangling), list(wrangling.values()), color=[GREY, GREY, TEAL], width=0.6)
 ax.bar_label(bars, labels=[fmt(v) for v in wrangling.values()], padding=3, fontweight="bold")
-ax.set(ylim=(0, 1), ylabel="macro-F1 (LOSO)", title="Random Forest dengan fitur yang makin baik")
+ax.set(ylim=(0, 1), ylabel="macro-F1 (LOSO)", title="Efek rekayasa fitur pada Random Forest")
 save(fig, "05_efek_wrangling")
 plt.show()
 
@@ -491,8 +495,8 @@ ax.imshow(cm, cmap="Greens")
 for i in range(3):
     for j in range(3):
         ax.text(j, i, cm[i, j], ha="center", va="center", color="white" if cm[i, j] > cm.max() / 2 else INK)
-ax.set(xticks=range(3), yticks=range(3), xticklabels=CLASSES, yticklabels=CLASSES, xlabel="tebakan model",
-       ylabel="kelas sebenarnya", title="Random Forest: tebakan vs kenyataan")
+ax.set(xticks=range(3), yticks=range(3), xticklabels=CLASSES, yticklabels=CLASSES, xlabel="prediksi model",
+       ylabel="kelas sebenarnya", title="Confusion matrix Random Forest (LOSO)")
 save(fig, "06_confusion_rf")
 plt.show()
 
@@ -533,7 +537,7 @@ meniru variasi itu.
 
 **Bagaimana caranya** (2 salinan buatan per sesi latih):
 - **Jitter:** menambahkan derau acak kecil (5% dari variasi sensor), seperti sensor yang bergetar.
-- **Variasi kepekaan:** mengalikan bacaan tiap sensor dengan faktor acak (sekitar ±30%) per sesi, seolah-olah
+- **Variasi sensitivitas sensor:** mengalikan bacaan tiap sensor dengan faktor acak (sekitar ±30%) per sesi, seolah-olah
   kita punya alat e-nose lain.
 
 **Aturan penting:** augmentasi **hanya untuk data latih**. Data uji selalu data asli.
@@ -545,7 +549,7 @@ def augment(train_windows, rng, method, copies=2):
         a = train_windows.copy()
         if method == "jitter":
             a[MQ] = a[MQ] + rng.normal(0, 0.05, (len(a), len(MQ))) * train_windows[MQ].std().to_numpy()
-        if method == "kepekaan":
+        if method == "sensitivitas":
             for s in a.sesi.unique():
                 rows = a.sesi == s
                 a.loc[rows, MQ] = a.loc[rows, MQ] * np.exp(rng.normal(0, 0.3, len(MQ)))
@@ -556,7 +560,7 @@ def augment(train_windows, rng, method, copies=2):
 
 AUG_MODELS = {"Decision Tree": MODELS["Decision Tree"], "Random Forest": make_rf}
 aug_rows = []
-for method in ["tanpa", "jitter", "kepekaan"]:
+for method in ["tanpa", "jitter", "sensitivitas"]:
     for name, make_model in AUG_MODELS.items():
         rng = np.random.default_rng(SEED)
         pred = np.empty_like(y)
@@ -571,15 +575,15 @@ for method in ["tanpa", "jitter", "kepekaan"]:
             pred[~train] = make_model().fit(X_train, y_train).predict(X[~train])
         aug_rows.append({"augmentasi": method, "model": name, **scores(pred)})
 aug_table = pd.DataFrame(aug_rows)
-display(aug_table.pivot(index="augmentasi", columns="model", values="macro_f1").loc[["tanpa", "jitter", "kepekaan"]].round(3))
+display(aug_table.pivot(index="augmentasi", columns="model", values="macro_f1").loc[["tanpa", "jitter", "sensitivitas"]].round(3))
 
 fig, ax = plt.subplots(figsize=(7, 3.9))
 pos = np.arange(3)
 for i, (name, color) in enumerate([("Decision Tree", GREY), ("Random Forest", TEAL)]):
-    v = aug_table[aug_table.model == name].set_index("augmentasi").loc[["tanpa", "jitter", "kepekaan"], "macro_f1"]
+    v = aug_table[aug_table.model == name].set_index("augmentasi").loc[["tanpa", "jitter", "sensitivitas"], "macro_f1"]
     bars = ax.bar(pos + (i - 0.5) * 0.38, v, 0.36, color=color, label=name)
     ax.bar_label(bars, labels=[fmt(x) for x in v], padding=3, fontsize=10)
-ax.set(xticks=pos, xticklabels=["tanpa augmentasi", "jitter (derau)", "variasi kepekaan"], ylim=(0, 1),
+ax.set(xticks=pos, xticklabels=["tanpa augmentasi", "Gaussian jitter", "variasi sensitivitas"], ylim=(0, 1),
        ylabel="macro-F1 (LOSO)", title="Efek augmentasi (hanya pada data latih)")
 ax.legend(loc="upper left", ncol=2)
 save(fig, "07_augmentasi")
@@ -587,11 +591,11 @@ plt.show()
 
 aug_pivot = aug_table.pivot(index="augmentasi", columns="model", values="macro_f1")
 RESULTS["augmentation"] = aug_rows
-delta = {m: {k: float(aug_pivot.loc[k, m] - aug_pivot.loc["tanpa", m]) for k in ["jitter", "kepekaan"]}
+delta = {m: {k: float(aug_pivot.loc[k, m] - aug_pivot.loc["tanpa", m]) for k in ["jitter", "sensitivitas"]}
          for m in AUG_MODELS}
 result_box(f'''
-- Decision Tree: jitter {signed(delta["Decision Tree"]["jitter"])}, variasi kepekaan {signed(delta["Decision Tree"]["kepekaan"])}.
-- Random Forest: jitter {signed(delta["Random Forest"]["jitter"])}, variasi kepekaan {signed(delta["Random Forest"]["kepekaan"])}.
+- Decision Tree: jitter {signed(delta["Decision Tree"]["jitter"])}, variasi sensitivitas {signed(delta["Decision Tree"]["sensitivitas"])}.
+- Random Forest: jitter {signed(delta["Random Forest"]["jitter"])}, variasi sensitivitas {signed(delta["Random Forest"]["sensitivitas"])}.
 - Artinya: data buatan **tidak otomatis menaikkan skor**. Variasi buatan tidak sama dengan perbedaan nyata antar
   sesi ayam. Bagian 9 menunjukkan bahwa **sesi asli tambahan** jauh lebih berguna.
 ''')
@@ -604,7 +608,7 @@ md(r"""
 
 Rubrik dosen: *bagaimana tambahan **iterasi** dan **data** dapat meningkatkan performa sistem sesuai tujuan.*
 
-**Tujuan sistem:** bukan cuma menebak kelas, tapi **mengambil keputusan** yang aman dan tidak boros:
+**Tujuan sistem:** tidak hanya memprediksi kelas, tetapi juga **mengambil keputusan** yang aman dan tidak boros:
 - **Jual:** ayam dianggap masih layak.
 - **Cek manual:** minta orang atau lab mengecek dulu. Ada biaya, tapi keputusannya pasti benar.
 - **Buang:** ayam dianggap busuk.
@@ -613,7 +617,7 @@ Rubrik dosen: *bagaimana tambahan **iterasi** dan **data** dapat meningkatkan pe
 
 | Unsur RL | Di proyek ini |
 |---|---|
-| **State** (yang dilihat agen) | tebakan Random Forest (Fresh/Semi-fresh/Spoiled) × model **yakin** atau **ragu** (peluang ≥ 0,7 atau < 0,7) → 6 state |
+| **State** (yang dilihat agen) | prediksi Random Forest (Fresh/Semi-fresh/Spoiled) × model **yakin** atau **ragu** (peluang ≥ 0,7 atau < 0,7) → 6 state |
 | **Aksi** | Jual, Cek manual, Buang |
 | **Reward** (asumsi kami) | lihat tabel di bawah |
 | **Cara belajar** | **ε-greedy**: 90% pilih aksi terbaik sejauh ini, 10% coba acak. Nilai tiap aksi diperbarui dengan rata-rata reward yang didapat (seperti materi *multi-armed bandit*). |
@@ -627,8 +631,8 @@ busuk dianggap paling berbahaya.
 | Cek manual | +0,5 | +0,5 (aman, tapi ada biaya cek) |
 | Buang | −1 (mubazir) | +1 |
 
-**Agar jujur:** agen belajar dari 12 sesi dan **dinilai pada 3 sesi lain** (5 putaran, setiap sesi pernah jadi
-ujian). Pembagian sesinya ditulis tetap supaya hasilnya sama di komputer mana pun. Tebakan Random Forest yang dipakai berasal dari model yang tidak pernah melihat sesi tersebut.
+**Validasi:** agen belajar dari 12 sesi dan **dinilai pada 3 sesi lain** (5 putaran, setiap sesi pernah jadi
+ujian). Pembagian sesinya ditulis tetap supaya hasilnya sama di komputer mana pun. Prediksi Random Forest yang dipakai berasal dari model yang tidak pernah melihat sesi tersebut.
 """)
 code(r"""
 proba_rf = probabilities["Random Forest"]
@@ -676,11 +680,11 @@ agent_final = curves[:, -1].mean()
 
 fig, ax = plt.subplots(figsize=(8, 4.2))
 ax.plot(steps_axis, curves.mean(axis=0), color=RED, lw=2.6, marker="o", ms=3, label="agen RL (ε-greedy)")
-ax.axhline(np.mean(trust_model), color=TEAL, ls="--", lw=1.4, label="selalu ikut tebakan model")
+ax.axhline(np.mean(trust_model), color=TEAL, ls="--", lw=1.4, label="selalu ikuti prediksi model")
 ax.axhline(0.5, color=AMBER, ls="--", lw=1.4, label="selalu cek manual")
 ax.axhline(np.mean(random_act), color=GREY, ls=":", lw=1.4, label="aksi acak")
 ax.set(xlabel="iterasi belajar agen", ylabel="rata-rata reward di sesi uji",
-       title="Makin banyak iterasi, keputusan agen makin baik")
+       title="Reward agen RL terhadap jumlah iterasi")
 ax.legend(loc="lower right")
 save(fig, "08_rl_kurva")
 plt.show()
@@ -690,6 +694,12 @@ policy_table = pd.DataFrame({"state": STATE_NAMES, "jumlah data": np.bincount(st
                              "aksi yang dipelajari": [ACTIONS[a] for a in policy_mode]})
 display(policy_table)
 
+# true average reward of each action per state: the values the agent estimates by trial and error
+state_reward = pd.DataFrame([[REWARD[state == s, a].mean() for a in range(3)] for s in range(6)],
+                            index=STATE_NAMES, columns=ACTIONS)
+state_reward.insert(0, "proporsi Spoiled", [float((~fit_to_sell[state == s]).mean()) for s in range(6)])
+display(state_reward.round(2))
+
 # what the learned rules do when applied to every window
 action = np.array(policy_mode)[state]
 impact = {"porsi_jual": float((action == 0).mean()), "porsi_cek": float((action == 1).mean()),
@@ -697,16 +707,19 @@ impact = {"porsi_jual": float((action == 0).mean()), "porsi_cek": float((action 
           "busuk_terjual_agen": int(((action == 0) & ~fit_to_sell).sum()),
           "busuk_terjual_ikut_model": int(((predicted <= 1) & ~fit_to_sell).sum()),
           "layak_terbuang_agen": int(((action == 2) & fit_to_sell).sum()),
+          "layak_terbuang_ikut_model": int(((predicted == 2) & fit_to_sell).sum()),
           "n_busuk": int((~fit_to_sell).sum()), "n_layak": int(fit_to_sell.sum())}
 display(pd.DataFrame({"": ["ayam busuk yang terjual", "ayam layak yang terbuang", "kasus yang dicek manual"],
                       "agen RL": [impact["busuk_terjual_agen"], impact["layak_terbuang_agen"], pct(impact["porsi_cek"])],
-                      "selalu ikut tebakan model": [impact["busuk_terjual_ikut_model"],
-                                                    int(((predicted == 2) & fit_to_sell).sum()), "0%"]}))
+                      "selalu ikuti prediksi model": [impact["busuk_terjual_ikut_model"],
+                                                    impact["layak_terbuang_ikut_model"], "0%"]}))
 RESULTS["rl"] = {"reward_start": float(curves[:, 0].mean()), "reward_after_100": float(curves[:, 1].mean()),
                  "reward_final": float(agent_final), "trust_model": float(np.mean(trust_model)),
                  "always_check": 0.5, "random_action": float(np.mean(random_act)),
                  "policy": dict(zip(STATE_NAMES, [ACTIONS[a] for a in policy_mode])),
-                 "curve": curves.mean(axis=0).round(4).tolist(), "steps": steps_axis.tolist(), "impact": impact}
+                 "curve": curves.mean(axis=0).round(4).tolist(), "steps": steps_axis.tolist(), "impact": impact,
+                 "state_counts": dict(zip(STATE_NAMES, np.bincount(state, minlength=6).tolist())),
+                 "state_reward": state_reward.round(4).to_dict("index")}
 """)
 md(r"""
 ### Efek tambah data: tambah sesi ayam asli
@@ -737,7 +750,7 @@ for _, r in session_curve.iterrows():
     ax.annotate(fmt(r["mean"], 2), (r.sesi_latih, r["mean"]), xytext=(0, 9), textcoords="offset points",
                 ha="center", fontsize=10, fontweight="bold")
 ax.set(xlabel="jumlah sesi ayam untuk latihan", ylabel="macro-F1 di sesi uji", ylim=(0, 1),
-       xticks=session_curve.sesi_latih, title="Makin banyak sesi asli, model makin akurat")
+       xticks=session_curve.sesi_latih, title="Performa Random Forest terhadap jumlah sesi latih")
 save(fig, "09_tambah_sesi")
 plt.show()
 
@@ -746,11 +759,11 @@ rl = RESULTS["rl"]
 result_box(f'''
 - **Tambahan iterasi:** reward agen naik dari {fmt(rl["reward_start"], 2)} (iterasi pertama) ke
   {fmt(rl["reward_after_100"], 2)} setelah 100 iterasi, lalu stabil di **{fmt(rl["reward_final"], 2)}**.
-- Agen mengalahkan "selalu ikut tebakan model" ({fmt(rl["trust_model"], 2)}) dan "selalu cek manual" (0,50).
-- Agen belajar: tebakan Fresh → **Jual**; Semi-fresh → **Cek manual**; Spoiled yang yakin → **Buang**.
+- Agen mengalahkan "selalu ikuti prediksi model" ({fmt(rl["trust_model"], 2)}) dan "selalu cek manual" (0,50).
+- Agen belajar: prediksi Fresh → **Jual**; Semi-fresh → **Cek manual**; Spoiled yang yakin → **Buang**.
   Cek manual dipakai hanya saat risikonya tinggi.
 - Kalau aturan agen diterapkan ke semua data: ayam busuk yang terjual **{rl["impact"]["busuk_terjual_agen"]}** dari
-  {num(rl["impact"]["n_busuk"])} (kalau sekadar ikut tebakan model: {rl["impact"]["busuk_terjual_ikut_model"]}).
+  {num(rl["impact"]["n_busuk"])} (kalau sekadar mengikuti prediksi model: {rl["impact"]["busuk_terjual_ikut_model"]}).
   Harganya: {pct(rl["impact"]["porsi_cek"])} kasus perlu cek manual.
 - **Tambahan data:** macro-F1 naik dari {fmt(session_curve["mean"].iloc[0], 2)} (1 sesi) ke
   **{fmt(session_curve["mean"].iloc[-1], 2)}** (14 sesi). Kurvanya sedikit naik-turun karena sesi latih dipilih
@@ -764,7 +777,7 @@ md(r"""
 # Bagian 10 — Sensor mana yang paling penting?
 
 Random Forest mencatat seberapa sering dan seberapa berguna tiap fitur dipakai untuk memisahkan kelas
-(*feature importance*). Kita jumlahkan 3 fitur dari sensor yang sama (level + porsi + naik).
+(*feature importance*). Kita jumlahkan 3 fitur dari sensor yang sama (level + proporsi + naik).
 """)
 code(r"""
 final_rf = make_rf().fit(X, y)
@@ -776,7 +789,7 @@ fig, ax = plt.subplots(figsize=(6.4, 3.8))
 bars = ax.barh(per_sensor.index, per_sensor.values,
                color=[RED if s == "MQ-135" else TEAL for s in per_sensor.index])
 ax.bar_label(bars, labels=[fmt(v, 2) for v in per_sensor.values], padding=3)
-ax.set(xlabel="importance (jumlah = 1)", title="Sumbangan tiap sensor di Random Forest")
+ax.set(xlabel="importance (jumlah = 1)", title="Feature importance per sensor (Random Forest)")
 save(fig, "10_sensor_penting")
 plt.show()
 
@@ -804,11 +817,11 @@ m = model_table.set_index("model")
 display(Markdown(f'''
 | Pertanyaan | Jawaban |
 |---|---|
-| Berapa skor kalau data dibagi acak (bocor)? | akurasi {pct(leak["acak"]["akurasi"])} |
-| Berapa skor yang jujur (per sesi)? | Random Forest akurasi {pct(leak["loso"]["akurasi"])}, macro-F1 {fmt(m.macro_f1["Random Forest"])} |
+| Berapa skor dengan *random split* (*data leakage*)? | akurasi {pct(leak["acak"]["akurasi"])} |
+| Berapa skor dengan validasi LOSO? | Random Forest akurasi {pct(leak["loso"]["akurasi"])}, macro-F1 {fmt(m.macro_f1["Random Forest"])} |
 | Apakah ensemble lebih baik? | ensemble terbaik {best_ens.model} {fmt(best_ens.macro_f1)} vs tunggal terbaik {best_single.model} {fmt(best_single.macro_f1)} |
 | Seberapa penting pengolahan data? | Random Forest {fmt(list(wrangling.values())[0])} → {fmt(list(wrangling.values())[-1])} |
-| Apakah augmentasi membantu? | Random Forest: jitter {signed(delta["Random Forest"]["jitter"])}, kepekaan {signed(delta["Random Forest"]["kepekaan"])} |
+| Apakah augmentasi membantu? | Random Forest: jitter {signed(delta["Random Forest"]["jitter"])}, sensitivitas {signed(delta["Random Forest"]["sensitivitas"])} |
 | Apakah tambahan iterasi membantu (RL)? | reward {fmt(rl["reward_start"], 2)} → {fmt(rl["reward_final"], 2)}; ikut model saja {fmt(rl["trust_model"], 2)} |
 | Apakah tambahan data membantu? | 1 sesi {fmt(session_curve["mean"].iloc[0], 2)} → 14 sesi {fmt(session_curve["mean"].iloc[-1], 2)} |
 | Sensor paling berpengaruh? | {rank.index[0]} |
@@ -817,14 +830,14 @@ print("Semua angka tersimpan di hasil/ringkasan.json; grafik di folder hasil/.")
 """)
 md(r"""
 ## Kesimpulan
-1. **Cara menguji menentukan segalanya.** Data yang dibagi acak memberi skor hampir sempurna yang palsu. Uji per sesi
-   memberi angka yang jujur.
-2. **Pengolahan data adalah langkah terpenting.** Kalibrasi per sesi (kenaikan dibanding jam pertama) membuat model
+1. **Skema validasi sangat menentukan.** *Random split* memberi skor hampir sempurna karena *data leakage*.
+   Validasi LOSO memberi estimasi performa yang realistis.
+2. **Pengolahan data adalah langkah terpenting.** Kalibrasi per sesi (perubahan terhadap baseline jam pertama) membuat model
    bisa menilai ayam dari sesi yang levelnya berbeda.
 3. **Ensemble lebih baik dari model tunggal**, terutama banyak pohon (Random Forest) dibanding satu pohon.
 4. **Augmentasi buatan tidak menggantikan data asli.** Yang menaikkan skor adalah **sesi ayam asli tambahan**.
 5. **Agen reinforcement learning** belajar kapan cukup percaya model dan kapan perlu cek manual, sehingga
-   keputusannya lebih aman dibanding sekadar mengikuti tebakan model.
+   keputusannya lebih aman dibanding sekadar mengikuti prediksi model.
 
 ## Batasan
 - Hanya **15 sesi**, sehingga hasil antar sesi masih naik-turun.

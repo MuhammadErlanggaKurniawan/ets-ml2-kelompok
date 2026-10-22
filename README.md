@@ -1,4 +1,4 @@
-# Deteksi Kesegaran Daging Ayam dengan Sensor Gas dan Machine Learning
+# Klasifikasi Kesegaran Daging Ayam Berbasis Ensemble dan Reinforcement Learning
 
 Proyek ETS **Machine Learning II** (Sains Data, UPN "Veteran" Jawa Timur), Oktober 2026.
 
@@ -10,12 +10,12 @@ Kelompok:
 ## Ringkasnya
 
 Daging ayam yang mulai busuk mengeluarkan gas. Enam sensor gas murah (seri MQ) dan satu sensor kelembapan
-membentuk **hidung elektronik (e-nose)**. Proyek ini menebak kondisi ayam (**Fresh**, **Semi-fresh**, atau
+membentuk **electronic nose (e-nose)**. Proyek ini mengklasifikasikan kondisi ayam (**Fresh**, **Semi-fresh**, atau
 **Spoiled**) hanya dari bacaan sensor.
 
 - **Satu dataset:** e-nose daging ayam dari Anwar & Anwar (2025), 15 sesi rekaman, 218.318 bacaan.
 - **Tiga teknik ML II:** augmentasi data, ensemble learning, reinforcement learning.
-- **Cara uji:** Leave-One-Session-Out. Model selalu diuji pada sesi ayam yang belum pernah dilihatnya.
+- **Skema validasi:** Leave-One-Session-Out (LOSO). Model selalu diuji pada sesi ayam yang tidak dipakai saat pelatihan.
 
 ## Notebook (jalankan di Colab)
 
@@ -32,10 +32,10 @@ Notebook dibangun dari `scripts/build_notebook.py`. Ubah kodenya di sana, lalu j
 
 | Pertanyaan | Hasil |
 |---|---|
-| Data dibagi acak (bocor) vs diuji per sesi (jujur) | akurasi 96,9% vs 77,6% |
+| Random split (data leakage) vs validasi LOSO | akurasi 96,9% vs 77,6% |
 | Ensemble terbaik vs model tunggal terbaik | Random Forest macro-F1 0,782 vs KNN 0,736 |
 | Efek pengolahan data pada Random Forest | 0,681 → 0,782 |
-| Efek augmentasi pada Random Forest | jitter −0,009, variasi kepekaan −0,015 |
+| Efek augmentasi pada Random Forest | jitter −0,009, variasi sensitivitas −0,015 |
 | Agen RL (reward di sesi uji) | 0,61 vs "selalu ikut model" 0,44 |
 | Ayam busuk yang lolos dijual (aturan agen vs ikut model) | 0 vs 254, dengan 47% kasus dicek manual |
 | Tambah sesi latih 1 → 14 | macro-F1 0,58 → 0,75 |
@@ -77,8 +77,8 @@ Kedua notebook memakai data dan fitur yang sama dengan notebook utama, dan diban
 | Anggota | Peran |
 |---|---|
 | Muhammad Erlangga Kurniawan | Koordinator. Menentukan topik dan arah proyek, yaitu kesegaran makanan dengan sensor gas MQ-135 sesuai skripsinya. Meninjau dan menyetujui setiap pendekatan, memeriksa hasil notebook dan slide, serta menyiapkan materi presentasi. |
-| Michael Valencio Erasmo Bagas Ganendra | Penanggung jawab eksperimen lanjutan ensemble (`eksperimen_michael_ensemble.ipynb`) dan presentasi bagian cara uji, ensemble, dan augmentasi. |
-| Rijal Apuila Khufi | Penanggung jawab eksperimen lanjutan reinforcement learning (`eksperimen_rijal_rl.ipynb`) dan presentasi bagian reinforcement learning dan diskusi. |
+| Michael Valencio Erasmo Bagas Ganendra | Penanggung jawab eksperimen lanjutan ensemble (`eksperimen_michael_ensemble.ipynb`) dan presentasi bagian skema validasi, hasil wrangling & augmentasi, dan ensemble learning. |
+| Rijal Apuila Khufi | Penanggung jawab eksperimen lanjutan reinforcement learning (`eksperimen_rijal_rl.ipynb`) dan presentasi bagian reinforcement learning serta hasil dan analisis. |
 
 **Penggunaan AI.** Kami memakai asisten AI (Claude) sebagai alat bantu untuk:
 - menulis dan merapikan kode,
@@ -87,7 +87,7 @@ Kedua notebook memakai data dan fitur yang sama dengan notebook utama, dan diban
 
 Yang dikerjakan dan dipertanggungjawabkan oleh kelompok:
 - pemilihan topik dan arah proyek,
-- keputusan pendekatan (misalnya satu dataset, cara uji per sesi, dan aspek ML II yang dipakai),
+- keputusan pendekatan (misalnya satu dataset, validasi per sesi, dan aspek ML II yang dipakai),
 - pemeriksaan hasil,
 - penyampaian presentasi.
 

@@ -64,48 +64,60 @@
       "jenis": "tunggal",
       "akurasi": 0.7217416378316033,
       "macro_f1": 0.7287399957629371,
-      "akurasi_sesi_terburuk": 0.4583333333333333
+      "akurasi_sesi_terburuk": 0.4583333333333333,
+      "f1_weighted": 0.7239506250196003,
+      "recall_spoiled": 0.7269503546099291
     },
     {
       "model": "KNN",
       "jenis": "tunggal",
       "akurasi": 0.7269319492502884,
       "macro_f1": 0.7355822196231486,
-      "akurasi_sesi_terburuk": 0.5075757575757576
+      "akurasi_sesi_terburuk": 0.5075757575757576,
+      "f1_weighted": 0.731353677661496,
+      "recall_spoiled": 0.7429078014184397
     },
     {
       "model": "Decision Tree",
       "jenis": "tunggal",
       "akurasi": 0.7044405997693195,
       "macro_f1": 0.7133242057988126,
-      "akurasi_sesi_terburuk": 0.532051282051282
+      "akurasi_sesi_terburuk": 0.532051282051282,
+      "f1_weighted": 0.710318635469097,
+      "recall_spoiled": 0.6728723404255319
     },
     {
       "model": "Random Forest",
       "jenis": "ensemble",
       "akurasi": 0.7759515570934256,
       "macro_f1": 0.7819733720254566,
-      "akurasi_sesi_terburuk": 0.553030303030303
+      "akurasi_sesi_terburuk": 0.553030303030303,
+      "f1_weighted": 0.7781568288968808,
+      "recall_spoiled": 0.774822695035461
     },
     {
       "model": "XGBoost",
       "jenis": "ensemble",
       "akurasi": 0.7598039215686274,
       "macro_f1": 0.7648651975524815,
-      "akurasi_sesi_terburuk": 0.5454545454545454
+      "akurasi_sesi_terburuk": 0.5454545454545454,
+      "f1_weighted": 0.7612263176750981,
+      "recall_spoiled": 0.8421985815602837
     },
     {
       "model": "Voting",
       "jenis": "ensemble",
       "akurasi": 0.7502883506343714,
       "macro_f1": 0.7561619236225758,
-      "akurasi_sesi_terburuk": 0.5227272727272727
+      "akurasi_sesi_terburuk": 0.5227272727272727,
+      "f1_weighted": 0.752328136146022,
+      "recall_spoiled": 0.7783687943262412
     }
   ],
   "wrangling": {
     "rata-rata mentah (7 fitur)": 0.680864051071575,
-    "+ level & porsi (13 fitur)": 0.7106228898826874,
-    "+ kenaikan sejak kalibrasi (19 fitur)": 0.7819733720254566
+    "+ log-level & proporsi (13 fitur)": 0.7106228898826874,
+    "+ perubahan thd baseline (19 fitur)": 0.7819733720254566
   },
   "confusion_rf": [
     [
@@ -159,14 +171,14 @@
       "akurasi_sesi_terburuk": 0.5454545454545454
     },
     {
-      "augmentasi": "kepekaan",
+      "augmentasi": "sensitivitas",
       "model": "Decision Tree",
       "akurasi": 0.7159746251441753,
       "macro_f1": 0.724390343157935,
       "akurasi_sesi_terburuk": 0.5466666666666666
     },
     {
-      "augmentasi": "kepekaan",
+      "augmentasi": "sensitivitas",
       "model": "Random Forest",
       "akurasi": 0.7603806228373703,
       "macro_f1": 0.7666211601763272,
@@ -261,8 +273,55 @@
       "busuk_terjual_agen": 0,
       "busuk_terjual_ikut_model": 254,
       "layak_terbuang_agen": 104,
+      "layak_terbuang_ikut_model": 210,
       "n_busuk": 1128,
       "n_layak": 2340
+    },
+    "state_counts": {
+      "Fresh (yakin)": 811,
+      "Fresh (ragu)": 188,
+      "Semi-fresh (yakin)": 655,
+      "Semi-fresh (ragu)": 730,
+      "Spoiled (yakin)": 833,
+      "Spoiled (ragu)": 251
+    },
+    "state_reward": {
+      "Fresh (yakin)": {
+        "proporsi Spoiled": 0.0,
+        "Jual": 1.0,
+        "Cek manual": 0.5,
+        "Buang": -1.0
+      },
+      "Fresh (ragu)": {
+        "proporsi Spoiled": 0.0,
+        "Jual": 1.0,
+        "Cek manual": 0.5,
+        "Buang": -1.0
+      },
+      "Semi-fresh (yakin)": {
+        "proporsi Spoiled": 0.1084,
+        "Jual": 0.3496,
+        "Cek manual": 0.5,
+        "Buang": -0.7832
+      },
+      "Semi-fresh (ragu)": {
+        "proporsi Spoiled": 0.2507,
+        "Jual": -0.5041,
+        "Cek manual": 0.5,
+        "Buang": -0.4986
+      },
+      "Spoiled (yakin)": {
+        "proporsi Spoiled": 0.8752,
+        "Jual": -4.2509,
+        "Cek manual": 0.5,
+        "Buang": 0.7503
+      },
+      "Spoiled (ragu)": {
+        "proporsi Spoiled": 0.5777,
+        "Jual": -2.4661,
+        "Cek manual": 0.5,
+        "Buang": 0.1554
+      }
     }
   },
   "session_curve": [

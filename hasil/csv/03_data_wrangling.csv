@@ -1,0 +1,4 @@
+tahap_fitur,jumlah_fitur,macro_f1_random_forest
+rata-rata mentah,7,0.6809
++ log-level & proporsi relatif,13,0.7106
++ perubahan terhadap baseline,19,0.782

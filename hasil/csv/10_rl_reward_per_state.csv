@@ -1,0 +1,7 @@
+state,proporsi Spoiled,Jual,Cek manual,Buang,jumlah_sampel,aksi_terpilih
+Fresh (yakin),0.0,1.0,0.5,-1.0,811,Jual
+Fresh (ragu),0.0,1.0,0.5,-1.0,188,Jual
+Semi-fresh (yakin),0.1084,0.3496,0.5,-0.7832,655,Cek manual
+Semi-fresh (ragu),0.2507,-0.5041,0.5,-0.4986,730,Cek manual
+Spoiled (yakin),0.8752,-4.2509,0.5,0.7503,833,Buang
+Spoiled (ragu),0.5777,-2.4661,0.5,0.1554,251,Cek manual

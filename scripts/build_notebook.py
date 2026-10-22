@@ -829,6 +829,56 @@ display(Markdown(f'''
 print("Semua angka tersimpan di hasil/ringkasan.json; grafik di folder hasil/.")
 """)
 md(r"""
+### Ekspor hasil per analisis ke CSV
+Setiap tabel hasil disimpan sebagai file CSV terpisah di folder `hasil/csv/`, supaya bisa dibuka di Excel atau
+Google Sheets tanpa menjalankan notebook.
+""")
+code(r"""
+CSV_DIR = OUT / "csv"
+CSV_DIR.mkdir(exist_ok=True)
+tables = {
+    "01_distribusi_kelas": pd.DataFrame({"kelas": CLASSES, "jumlah_segmen": class_counts,
+                                         "proporsi": class_counts / class_counts.sum()}),
+    "02_validasi_random_split_vs_loso": pd.DataFrame([{"skema": "random split (data leakage)", **leak["acak"]},
+                                                      {"skema": "Leave-One-Session-Out", **leak["loso"]}]),
+    "03_data_wrangling": pd.DataFrame({"tahap_fitur": ["rata-rata mentah", "+ log-level & proporsi relatif",
+                                                       "+ perubahan terhadap baseline"],
+                                       "jumlah_fitur": [X_raw.shape[1], X_no_rise.shape[1], X.shape[1]],
+                                       "macro_f1_random_forest": list(wrangling.values())}),
+    "04_ensemble_vs_model_tunggal": model_table,
+    "05_confusion_matrix_random_forest": pd.DataFrame(cm, columns=[f"prediksi {c}" for c in CLASSES])
+                                           .assign(aktual=CLASSES).set_index("aktual").reset_index(),
+    "06_recall_per_kelas_random_forest": pd.DataFrame({"kelas": CLASSES, "recall": recall}),
+    "07_akurasi_per_sesi_random_forest": pd.DataFrame({"sesi": per_session.index, "akurasi": per_session.values,
+                                                       "puncak_MQ135": peaks[per_session.index].values}),
+    "08_data_augmentation": aug_table,
+    "09_rl_kurva_reward": pd.DataFrame({"iterasi": steps_axis, "reward_agen_rl": curves.mean(axis=0),
+                                        "selalu_ikuti_prediksi_model": np.mean(trust_model),
+                                        "selalu_cek_manual": 0.5, "aksi_acak": np.mean(random_act)}),
+    "10_rl_reward_per_state": state_reward.assign(jumlah_sampel=np.bincount(state, minlength=6),
+                                                  aksi_terpilih=[ACTIONS[a] for a in policy_mode])
+                                          .rename_axis("state").reset_index(),
+    "11_rl_perbandingan_kebijakan": pd.DataFrame([
+        {"kebijakan": "agen RL (epsilon-greedy)", "reward_rata2_sesi_uji": rl["reward_final"],
+         "ayam_busuk_terjual": impact["busuk_terjual_agen"], "ayam_layak_terbuang": impact["layak_terbuang_agen"],
+         "proporsi_cek_manual": impact["porsi_cek"]},
+        {"kebijakan": "selalu ikuti prediksi model", "reward_rata2_sesi_uji": rl["trust_model"],
+         "ayam_busuk_terjual": impact["busuk_terjual_ikut_model"],
+         "ayam_layak_terbuang": impact["layak_terbuang_ikut_model"], "proporsi_cek_manual": 0.0},
+        {"kebijakan": "selalu cek manual", "reward_rata2_sesi_uji": 0.5, "ayam_busuk_terjual": 0,
+         "ayam_layak_terbuang": 0, "proporsi_cek_manual": 1.0},
+        {"kebijakan": "aksi acak", "reward_rata2_sesi_uji": rl["random_action"]}])
+        .astype({"ayam_busuk_terjual": "Int64", "ayam_layak_terbuang": "Int64"}),
+    "12_rl_tambah_sesi_latih": session_curve.rename(columns={"mean": "macro_f1_rata2", "std": "macro_f1_std"}),
+    "13_sensor_importance": rank.rename_axis("sensor").reset_index(name="importance"),
+}
+for name, table in tables.items():
+    table.round(4).to_csv(CSV_DIR / f"{name}.csv", index=False)
+print(f"{len(tables)} file CSV tersimpan di hasil/csv/:")
+for name in tables:
+    print(" -", f"{name}.csv")
+""")
+md(r"""
 ## Kesimpulan
 1. **Skema validasi sangat menentukan.** *Random split* memberi skor hampir sempurna karena *data leakage*.
    Validasi LOSO memberi estimasi performa yang realistis.

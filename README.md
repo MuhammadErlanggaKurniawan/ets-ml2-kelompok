@@ -40,7 +40,10 @@ Notebook dibangun dari `scripts/build_notebook.py`. Ubah kodenya di sana, lalu j
 | Ayam busuk yang lolos dijual (aturan agen vs ikut model) | 0 vs 254, dengan 47% kasus dicek manual |
 | Tambah sesi latih 1 → 14 | macro-F1 0,58 → 0,75 |
 
-Semua angka ada di `hasil/ringkasan.json`, dan grafiknya ada di folder `hasil/`.
+Semua angka ada di `hasil/ringkasan.json`, grafiknya di folder `hasil/`, dan tabel tiap analisis dalam bentuk CSV
+di folder [`hasil/csv/`](hasil/csv): distribusi kelas, validasi, data wrangling, ensemble, confusion matrix,
+recall, akurasi per sesi, augmentasi, kurva reward RL, reward per state, perbandingan kebijakan, penambahan sesi,
+dan sensor importance.
 
 ## Data
 
@@ -78,6 +81,7 @@ Kedua notebook memakai data dan fitur yang sama dengan notebook utama. Kerangka 
 | `notebooks/` | notebook utama + dua notebook eksperimen lanjutan |
 | `docs/` | ringkasan hasil eksperimen lanjutan |
 | `hasil/` | grafik dan `ringkasan.json` dari run notebook utama |
+| `hasil/csv/` | 13 tabel hasil per analisis (CSV) |
 | `deck/` | slide presentasi dan skrip pembuatnya |
 | `scripts/` | pembuat notebook (`build_notebook.py`, `build_starters.py`) |
 

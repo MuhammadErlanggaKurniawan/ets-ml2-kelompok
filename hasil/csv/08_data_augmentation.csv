@@ -1,0 +1,7 @@
+augmentasi,model,akurasi,macro_f1,akurasi_sesi_terburuk
+tanpa,Decision Tree,0.7044,0.7133,0.5321
+tanpa,Random Forest,0.776,0.782,0.553
+jitter,Decision Tree,0.6964,0.6976,0.3043
+jitter,Random Forest,0.7673,0.7735,0.5455
+sensitivitas,Decision Tree,0.716,0.7244,0.5467
+sensitivitas,Random Forest,0.7604,0.7666,0.5455

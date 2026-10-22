@@ -1,0 +1,7 @@
+model,jenis,akurasi,macro_f1,akurasi_sesi_terburuk,f1_weighted,recall_spoiled
+Logistic Regression,tunggal,0.7217,0.7287,0.4583,0.724,0.727
+KNN,tunggal,0.7269,0.7356,0.5076,0.7314,0.7429
+Decision Tree,tunggal,0.7044,0.7133,0.5321,0.7103,0.6729
+Random Forest,ensemble,0.776,0.782,0.553,0.7782,0.7748
+XGBoost,ensemble,0.7598,0.7649,0.5455,0.7612,0.8422
+Voting,ensemble,0.7503,0.7562,0.5227,0.7523,0.7784

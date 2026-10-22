@@ -1,0 +1,3 @@
+skema,akurasi,macro_f1,akurasi_sesi_terburuk
+random split (data leakage),0.9694,0.9701,0.8106
+Leave-One-Session-Out,0.776,0.782,0.553

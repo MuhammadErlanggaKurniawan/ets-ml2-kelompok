@@ -1,0 +1,5 @@
+kebijakan,reward_rata2_sesi_uji,ayam_busuk_terjual,ayam_layak_terbuang,proporsi_cek_manual
+agen RL (epsilon-greedy),0.6057,0,104,0.4717
+selalu ikuti prediksi model,0.4421,254,210,0.0
+selalu cek manual,0.5,0,0,1.0
+aksi acak,-0.2669,,,
